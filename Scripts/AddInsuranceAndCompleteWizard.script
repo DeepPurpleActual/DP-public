@@ -1,0 +1,50 @@
+﻿global CurrentPatient
+
+//Determines whether the patient is self-pay
+If global CurrentPatient.FinancialClass <> "Self Pay" and global CurrentPatient.FinancialClass <> "" then
+	//Add patient payor
+	TypeText OptionKey,"n"
+	Click CreateNewCoverage
+	TypeText global CurrentPatient.InsurancePlanID
+	TypeText Return
+	//Allows for multiple payors
+	If ImageFound(1, "PayorPlanSelect") then
+		TypeText Return	
+	End If
+	//Allows for a subscriber other than the patient
+	If ImageFound(1, "SelectedSubscriber") then
+		Click FoundImageLocation()
+	End If
+	//Overrides query
+	TypeText OptionKey,"e"
+	
+	If global CurrentPatient.FinancialClass = "Medicaid" then
+		Set the SearchRectangle to ("CoverageMembers_A","CoverageMembers_B")
+		Set tempCoverageMember to the first 5 characters of CurrentPatient.PatientName
+		Click (Text:tempCoverageMember)
+		Set the searchRectangle to ()
+		Set the SearchRectangle to ("CoverageMemberInformation_A","CoverageMemberInformation_B")
+		Click (Image:"Effectivefrom", WaitFor:1)
+		TypeText "mb",Tab,Tab
+		TypeText CurrentPatient.SubscriberID,Tab
+		TypeText "verified by website",Tab
+		TypeText OptionKey,"a"
+		Set the searchRectangle to ()
+	Else
+		TypeText Tab
+		TypeText Tab
+		TypeText Tab
+		TypeText "01",Tab
+		TypeText global CurrentPatient.SubscriberID,Tab
+		TypeText "mb",Tab
+		TypeText Tab
+		TypeText "verified by website",Tab
+	End If
+	
+	//Populate subscriber demographics and finish wizard
+	TypeText OptionKey,"n"
+	TypeText OptionKey,"u"
+	TypeText OptionKey,"i"
+	TypeText OptionKey,"n"
+	
+End If

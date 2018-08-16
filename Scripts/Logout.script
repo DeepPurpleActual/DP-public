@@ -1,0 +1,11 @@
+﻿(*If ImageFound(5, (text:"Log Out")) then
+	click FoundImageLocation()
+End If*)
+
+set the searchRectangle to ()
+
+Click "HyperspaceLogOut"
+
+If ImageFound(5, "ExitHyperspacePrompt") then
+	TypeText OptionKey,"x"
+End If

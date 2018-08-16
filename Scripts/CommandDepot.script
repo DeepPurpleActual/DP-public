@@ -1,0 +1,236 @@
+﻿
+//code for command to create a search rectangle based on the position of an image
+on SetSearchRectangleCommand image, x_distance, y_distance, x_offset, y_offset
+	put ImageRectangle(Image:image, WaitFor:5) into ImageRectangle
+	set StartLeftSearch = left(ImageRectangle) + x_offset
+	set StartTopSearch = top(ImageRectangle) + y_offset
+	set EndRightSearch = StartLeftSearch + x_distance
+	set EndBottomSearch = StartTopSearch + y_distance
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set the searchRectangle to (UL_Search,BR_Search)
+	log UL_Search
+	log BR_Search
+end SetSearchRectangleCommand
+
+//code for command to create a search rectangle based on the position of text
+on SetSearchRectangleCommandBasedOnText text, x_distance, y_distance, x_offset, y_offset
+	put ImageRectangle(Text:text, WaitFor:5) into ImageRectangle
+	set StartLeftSearch = left(ImageRectangle) + x_offset
+	set StartTopSearch = top(ImageRectangle) + y_offset
+	set EndRightSearch = StartLeftSearch + x_distance
+	set EndBottomSearch = StartTopSearch + y_distance
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set the searchRectangle to (UL_Search,BR_Search)
+	log UL_Search
+	log BR_Search
+end SetSearchRectangleCommandBasedOnText
+
+//function to read text at a location defined by the same line as the line text occurring beneath a column image
+function ReadTextOnSameLine LineText, image1, rowheight
+	if rowheight = "" then
+		set rowheight = 2
+	end if
+	put ImageRectangle(Text:LineText,WaitFor:5) into ImageRectangle1
+	put ImageRectangle(Image:image1,WaitFor:5) into ImageRectangle2
+	set StartLeftSearch = left(ImageRectangle2)
+	set StartTopSearch = top(ImageRectangle1) - 2
+	set EndRightSearch = right(ImageRectangle2)
+	set EndBottomSearch = bottom(ImageRectangle1) + rowheight
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set thevalue to ReadText(UL_Search,BR_Search)
+	log thevalue
+	return thevalue
+end ReadTextOnSameLine
+
+//function to read text at a location below a given image based on the height of the row beneath the image and bounded by a column width
+function ReadTextFromBelowImageLocation image1, rowheight, columnwidth
+	if rowheight = "" then
+		set rowheight = 2
+	end if
+	put ImageRectangle(Image:image1,WaitFor:5) into ImageRectangle1
+	set StartLeftSearch = left(ImageRectangle1)
+	set StartTopSearch = bottom(ImageRectangle1) +2
+	set EndRightSearch = right(ImageRectangle1) + columnwidth
+	set EndBottomSearch = bottom(ImageRectangle1) + rowheight
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set thevalue to trimAll(ReadText(UL_Search,BR_Search),contrast:on)
+	log thevalue
+	return thevalue
+end ReadTextFromBelowImageLocation
+
+//function to read text at a location defined by the same line as the first image occurring beneath the second image
+function ReadTextOnSameLineAsImage image1, image2
+	put ImageRectangle(Image:image1,WaitFor:5) into ImageRectangle1
+	put ImageRectangle(Image:image2,WaitFor:5) into ImageRectangle2
+	set StartLeftSearch = left(ImageRectangle2)
+	set StartTopSearch = top(ImageRectangle1)
+	set EndRightSearch = right(ImageRectangle2)
+	set EndBottomSearch = bottom(ImageRectangle1) + 2
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set thevalue to ReadText(UL_Search,BR_Search)
+	set thexposition to the first item of FoundImageLocation()
+	set theyposition to the second item of FoundImageLocation()
+	log thevalue
+	return thevalue
+end ReadTextOnSameLineAsImage
+
+//code to click text at a location defined by the same line as the first image occurring beneath the second image
+on ClickTextOnSameLineAsImage image1, image2
+	put ImageRectangle(Image:image1,WaitFor:5) into ImageRectangle1
+	put ImageRectangle(Image:image2,WaitFor:5) into ImageRectangle2
+	set StartLeftSearch = left(ImageRectangle2)
+	set StartTopSearch = top(ImageRectangle1)
+	set EndRightSearch = right(ImageRectangle2)
+	set EndBottomSearch = bottom(ImageRectangle1) + 2
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set thevalue to ReadText(UL_Search,BR_Search)
+	set the searchRectangle to(UL_Search,BR_Search)
+	click (text:thevalue)
+	set the searchRectangle to ()
+	log thevalue
+end ClickTextOnSameLineAsImage
+
+//function to find an image at a location defined by the same line as where text is located and extending a given distance
+function FindImageOnSameLineAsText text_string, distance, search_image, myvalidcharacters
+	if myvalidcharacters = ""
+		set myvalidcharacters to "*"
+	end if
+	put ImageRectangle(Text:text_string,WaitFor:5,ValidCharacters: myvalidcharacters) into ImageRectangle1
+	set StartLeftSearch = left(ImageRectangle1)
+	set StartTopSearch = top(ImageRectangle1) - 2
+	set EndRightSearch = right(ImageRectangle1) + distance
+	set EndBottomSearch = bottom(ImageRectangle1) + 2
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set the searchRectangle to(UL_Search,BR_Search)
+	set thevalue = ImageLocation(search_image)
+	log thevalue
+	return thevalue
+	set the searchRectangle to ()
+end FindImageOnSameLineAsText
+
+//function to read text at a location defined by the same line as the first image extending for a given distance
+function ReadTextOnSameLineAsImageForGivenDistance image1, distance, mycontrast, mycontrasttolerance, myvalidcharacters, myvalidpattern
+	put ImageRectangle(Image:image1,WaitFor:5) into ImageRectangle1
+	set StartLeftSearch = right(ImageRectangle1) + 2
+	set StartTopSearch = top(ImageRectangle1) +2
+	set EndRightSearch = right(ImageRectangle1) + distance
+	set EndBottomSearch = bottom(ImageRectangle1) + 2
+	set UL_Search=(StartLeftSearch,StartTopSearch)
+	set BR_Search=(EndRightSearch,EndBottomSearch)
+	set thevalue to ReadText((UL_Search,BR_Search),contrast: mycontrast, contrastTolerance:mycontrasttolerance, ValidCharacters:myvalidcharacters, ValidPattern:myvalidpattern)
+	log UL_Search
+	log ColorAtLocation(BR_Search)
+	log thevalue
+	return thevalue
+end ReadTextOnSameLineAsImageForGivenDistance
+
+// Simplifies conditionally clicking an image given a Wait For Value, what type of error to throw, and the coordinates of a search rectangle
+on FindAndClickImage image_name,WFV,MsgType,SR
+	if WFV = "" then
+		set WFV=0
+	end if
+	If SR="" then
+		put () into SR
+		//		set the searchRectangle to ()
+	Else
+		//		set the searchRectangle to SR
+	End If
+	if ImageFound(WFV, image:image_name, searchRectangle:(SR)) then
+		Wait 1
+		click FoundImageLocation()
+	else if MsgType = "none" then
+		
+	else if MsgType = "warning" then
+		CaptureScreen (Name: "warning_"&image_name)
+		LogWarning "The image"&&image_name&&"could not be found."
+		
+	else if MsgType = "error" then
+		CaptureScreen (Name: "error_"&image_name)
+		LogError "The image"&&image_name&&"could not be found."
+	end if
+	set the searchRectangle to ()	
+end FindAndClickImage
+
+// Simplifies conditionally clicking text given a Wait For Value, what type of error to throw, and the coordinates of a search rectangle
+on FindAndClickText text_string,WFV,MsgType,SR
+	if WFV = "" then
+		set WFV=0
+	end if
+	If SR="" then
+		set the searchRectangle to ()
+	Else
+		set the searchRectangle to SR
+	End If
+	If ImageFound(WFV, (text:text_string)) then
+		Wait 1
+		Click FoundImageLocation()
+	else if MsgType = "none" then
+		
+	else if MsgType = "warning" then
+		CaptureScreen (Name: "warning_"&text_string)
+		LogWarning "The image"&&text_string&&"could not be found."
+else if MsgType = "error" then
+		CaptureScreen (Name: "error_"&text_string)
+		LogError "The image"&&text_string&&"could not be found."
+	end if
+	set the searchRectangle to ()	
+end FindAndClickText
+
+// Quick function to conditionally populate a variable to assist during development
+function CheckForBlankVariable variable_name, default_value
+	if variable_name="" then
+		set thedata = default_value
+	else
+		set thedata = variable_name
+	end if
+	return thedata
+end CheckForBlankVariable
+
+// Looks up the parameter in the LoginMatrix.xlsx table
+function DetermineLoginDeptID LoginDeptType
+	set tempid to the record of global LoginMatrix where M_LoginDeptType is LoginDeptType
+	log "What follows is the tempid.M_LoginVariable"
+	log tempid.M_LoginVariable
+	log global CurrentPatient.(tempid.M_LoginVariable)
+	if global CurrentPatient.(tempid.M_LoginVariable) is a number then
+		log global CurrentPatient.(tempid.M_LoginVariable) && "is a number"
+		set thedata = global CurrentPatient.(tempid.M_LoginVariable)
+	else
+		set tempid2 to the record of global DepartmentMatrix where M_DeptName is global CurrentPatient.(tempid.M_LoginVariable)
+		set thedata = tempid2.M_DeptID
+log tempid2.M_DeptName
+put tempid.M_LoginVariable into tempidcolumn
+		put tempidcolumn into idcolumn
+		replace "ID" in tempidcolumn with "Name"
+		put tempidcolumn into namecolumn
+		log "The ID column is"&& idcolumn
+		log "The Name column is"&&namecolumn
+		put tempid2.M_DeptName into (namecolumn) of the record of global myTestPatients where "RecNumber" = global RecordCountCounter
+		log thedata
+		put thedata into (idcolumn) of the record of global myTestPatients where "RecNumber" = global RecordCountCounter
+	end if
+	return thedata
+end DetermineLoginDeptID
+
+// Starts a recording from within a script
+on StartRecordingThisScript myscriptname
+	if global RecordThisScript = "Yes" then
+		StartMovie myscriptname, extraTime:1, imageHighlighting:Yes
+	end if
+end StartRecordingThisScript
+
+// Stops a recording from within a script
+on StopRecordingThisScript
+	if global RecordThisScript = "Yes" then
+		StopMovie
+		Wait 5
+	end if
+end StopRecordingThisScript
+

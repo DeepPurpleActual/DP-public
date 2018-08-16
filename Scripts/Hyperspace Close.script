@@ -1,0 +1,42 @@
+﻿log "Hyperspace Close has begun."
+
+wait 2
+
+(* Closes Hyperspace *)
+TypeText OptionKey,"x"
+
+Repeat until ImageFound("WindowsStartButton_1") or ImageFound("WindowsStartButton_2")
+	Log "Looking for Windows button."
+End repeat
+
+If ImageFound(5, "Citrix_LogOff") then
+	Click FoundImageLocation()
+End If
+
+(* Closes Citrix XenApp *)
+Click "CitrixLogo"
+
+TypeText OptionKey,F4
+
+(*WaitFor 30.0, (Text:"XenApp", CaseSensitive:"Yes", ContrastTolerance:"100", ContrastColor:"AutoDetect", Contrast:"On")
+Click FoundImageLocation()*)
+
+(*Repeat 10 times
+	if ImageFound(Text:"XenApp", CaseSensitive:"Yes", ContrastTolerance:"100", ContrastColor:"AutoDetect", WaitFor:1, Contrast:"On") then
+		TypeText OptionKey,F4
+	end if
+End Repeat*)
+
+If ImageFound(Image:"Cancel_3",WaitFor:10) then
+	Click FoundImageLocation()
+End If 
+
+If ImageFound(2, "ChromeDot") or ImageFound("ChromeDotSelected")then
+	LogSuccess "Citrix is completely closed."
+else
+	if ImageFound("CitrixLogo")
+		LogError "Citrix is still open."
+	else
+		LogWarning "Citrix is closed but another application is hiding the Chrome icon."
+	End If
+End If

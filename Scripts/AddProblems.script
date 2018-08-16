@@ -1,0 +1,22 @@
+﻿run CommandDepot.StartRecordingThisScript "AddProblems"&&LoginUserID
+
+//Add problem
+Click (Image:"ProblemList",WaitFor:2)
+Wait until ImageFound(Image:"Searchfornewproblem", WaitFor:5)
+Wait 1
+Click FoundImageLocation()
+TypeText global CurrentPatient.ProblemID1,Return
+TypeText OptionKey,"a"
+Click (Image:"Noted", WaitFor:12.8)
+TypeText global CurrentPatient.ProblemDateNoted1,Tab
+TypeText OptionKey,"r"
+TypeText OptionKey,"o"
+TypeText OptionKey,"a"
+run CommandDepot.SetSearchRectangleCommand DiagnosisHeader, 400, 400, 0, 30
+//set tempProblemName1 to global CurrentPatient.ProblemName1
+If ImageFound(1, (text:global CurrentPatient.ProblemName1)) then
+	LogSuccess "The problem has been added"
+End If
+set the searchRectangle to ()
+
+run CommandDepot.StopRecordingThisScript

@@ -1,0 +1,59 @@
+﻿params ADTMessageType
+
+run CommandDepot.StartRecordingThisScript "FindBridgesMessage"&&ADTMessageType
+
+if ADTMessageType = "" then
+	set ADTMessageType = "A28"
+end if
+
+if global MyKeyDelay = "" then
+	set global MyKeyDelay = ".05"
+end if
+
+set the nextKeyDelay to global MyKeyDelay
+(*Click "InterfaceSearchMessages"*)
+Click (Text:"Search Messages")
+
+Click (Image:"InterfaceMessageSearch", WaitFor:5)
+If global CurrentPatient.FacAbbrev equals "JHH" or global CurrentPatient.FacAbbrev equals "JHCH" or global CurrentPatient.FacAbbrev equals "HPRH" or global CurrentPatient.FacAbbrev equals "CLDH" or global CurrentPatient.FacAbbrev equals "PRDH" or global CurrentPatient.FacAbbrev equals "NSHH" or global CurrentPatient.FacAbbrev equals "WAYH"   then
+	TypeText "554704",Tab
+Else
+	TypeText "554700",Tab	
+End If
+
+TypeText global CurrentPatient.mrn,Tab,"con",Tab,"pid",Tab,Tab
+TypeText ADTMessageType,Tab,"con",Tab,"evn",Tab,"1",Tab
+//TypeText global CSN,Tab,"con",Tab,"pv1",Tab,"19",Tab
+
+Click "Interface_Todaysmessages"
+Click "DateTimeranqe"
+TypeText "t",Tab,"n-10",Tab,"t",Tab,"n",Tab
+TypeText OptionKey,"r"
+
+Click (Image:"SearchMessages554700", WaitFor:120)
+
+If ImageFound("Nomessageswerefound") then
+	LogError ADTMessageType & " could not be located"
+else
+	DoubleClick (text:ADTMessageType)
+	
+	put ImageRectangle(Image:"InterfaceMessage", WaitFor:5) into IM_Rectangle
+	set StartLeftIM = left(IM_Rectangle) + 165
+	set StartTopIM = top(IM_Rectangle)
+	set EndRightIM = StartLeftIM +60
+	set EndBottomIM = StartTopIM + 25
+	set UL_IM=(StartLeftIM,StartTopIM)
+	set BR_IM=(EndRightIM,EndBottomIM)
+	set global MSG_ID = ReadText(UL_IM,BR_IM)
+	log UL_IM
+	log BR_IM
+	log global MSG_ID
+	
+	Click "CloseX_new"
+	Click "CloseX_new"
+	
+	LogSuccess ADTMessageType & " was located"
+End If
+
+run CommandDepot.StopRecordingThisScript
+

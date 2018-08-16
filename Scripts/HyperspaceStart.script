@@ -1,0 +1,140 @@
+﻿global HyperspaceLaunched
+
+run CommandDepot.StartRecordingThisScript HyperspaceStart
+
+If global HyperspaceLaunched is not "Yes" then
+	
+	log "Hyperspace Start has begun."
+	
+	//Closes Server Manager
+	(*if ImageFound("ServerManager") then
+	Click "ServerManager"
+	KeyDown OptionKey,F4
+	KeyUp OptionKey,F4
+end if*)
+	
+	Run "Secure Check"
+	
+	//Closes out of Hyperspace Login if it is already open
+	TypeText OptionKey,"x"
+	(*If ImageFound(1, "HyperspaceExit") then
+	Click FoundImageLocation()
+End if*)
+	
+	Run "PW"
+	
+	Run "Determine Login User"
+	
+	If global LoginUser = "u154483" then
+		Run PW2
+	End If
+	
+	//Logs out of Citrix if it is already open
+	If ImageFound(1,"Citrix_LogOff") then
+		Click FoundImageLocation()
+	End if
+	
+	//Clicks Citrix <Return to Log In> button
+	(*If ImageFound(1,"CitrixReturnToLogOn") then
+		Click FoundImageLocation()
+	End If*)
+	If ImageFound("MyAppsLogOn") then
+		Click FoundImageLocation()
+	End If
+	
+	
+	
+	//Closes Hyperspace if it is open
+	if ImageFound("HyperspaceLogOut") then
+		Click FoundImageLocation()
+		If ImageFound(45,"HyperspaceExit") then
+			Click FoundImageLocation()
+		End If
+	end if
+	
+	//Launches Citrix login from Windows desktop
+	If imagefound(30,"ChromeDot") or ImageFound("ChromeDotSelected")then
+		TypeText WindowsKey, "r"
+		Wait 1
+		TypeText "C:\Program Files (x86)\Google\Chrome\Application\chrome.exe", return
+		
+		WaitFor 25.0,"AddressBar"
+		wait 1
+		TypeText controlKey &"l"
+		TypeText "https://myapps.unch.unc.edu",Return
+		
+	End If
+	
+	
+	//Checks to see whether Chrome is open but on wrong tab
+	If ImageFound(2, "UNCHealthCitrix")
+		click FoundImageLocation()
+	End If
+	
+	//Launches Citrix from Citrix login screen
+	If ImageFound (10,"MyAppsUsername") then
+		SetOption Scriptlogging, Silent
+		Click FoundImageLocation()
+		TypeText tabKey
+		KeyDown shiftKey,tabKey
+		KeyUp shiftKey
+		TypeText global LoginUser,tabKey
+		TypeText global citrix_pw,Return
+		SetOption Scriptlogging, On
+	End If
+	
+	(*If global Environment = "TST" Then
+	
+	//Checks to see whether Citrix Opens in Folder View
+	If ImageFound(2,"Hyperspace") then
+		Click FoundImageLocation()
+		Wait 5
+		Click "HyperspaceTST"
+	End If
+	
+	//Jumps to Hyperspace directly from HyperspaceTST icon
+	If ImageFound(10,"HyperspaceTST") then
+		Click "HyperspaceTST"
+	End If
+	
+End if
+
+If global Environment = "POC" Then
+	
+	//Checks to see whether Citrix Opens in Folder View
+	If ImageFound(2,"Hyperspace") then
+		Click FoundImageLocation()
+	End If
+	
+	//Jumps to Hyperspace directly from HyperspacePOC icon
+	If ImageFound(10,"HyperspacePOC") then
+		Click FoundImageLocation()
+	End If
+	
+End if*)
+	Run "Environment Safety Net"
+	
+	//Set the searchRectangle to (CitrixUL,CitrixLR)
+	//Set the searchRectangle to (17,147,1007,707)
+	
+	set the searchrectangle to (MyAppsUNCHC_Logo,RemoteScreenSize())
+	Wait 2
+	Click (Text:global RootFolder)
+	Wait 2
+	Click (Text:global EnvironmentName)
+	
+	Set the searchRectangle to ()
+	
+	
+	
+	
+	If ImageFound(30,"UserID") then
+		Click FoundImageLocation()
+		LogSuccess "Hyperspace Start was successful"
+	End If
+	
+	Set global HyperspaceLaunched to "Yes"
+	
+End If
+
+run CommandDepot.StopRecordingThisScript

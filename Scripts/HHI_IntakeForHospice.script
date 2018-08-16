@@ -1,0 +1,54 @@
+﻿
+Click (Text:"Hospice Intake")
+TypeText "HSPC,Testing Alpha"
+TypeText Return
+TypeText Return
+TypeText Tab,"000000000",Tab,"m",Tab,"032061",Tab,OptionKey,"n"
+TypeText OptionKey,"n"
+TypeText OptionKey,"a"
+Click (Text:"EpisodeofCareInf", WaitFor:57)
+TypeText "032061,HSCP,Testing",Tab
+TypeText Tab
+TypeText Tab
+TypeText "clin",Tab
+Click "ReferralInformation"
+TypeText OptionKey,"e"
+TypeText OptionKey,"n"
+TypeText Tab
+TypeText Tab
+TypeText Tab
+TypeText "hospice",Tab
+TypeText "incoming",Tab
+TypeText Tab
+TypeText Tab
+TypeText Tab
+TypeText "2636",Tab
+TypeText Tab
+TypeText Tab
+TypeText "unc hospice services",Tab
+
+
+Click "Authorization"
+Click (Image:"Startdate", WaitFor:10.5)
+TypeText "t",Tab
+
+TypeText OptionKey,"a"
+
+Click "CloseX/CloseXFlowsheet"
+Click "HospiceDiagnoses"
+Click (Image:"HospiceDiagnoses_1", WaitFor:8.9)
+TypeText "pancreatic cancer",Tab
+TypeText OptionKey,"a"
+TypeText OptionKey,"a"
+Click "HospiceInfo"
+Click (Image:"ZeroPriorDays", WaitFor:27)
+TypeText Tab
+TypeText "2636",Tab
+Click "CareTeamInformati"
+Click "CareTeamMember"
+TypeText "hospice,rn",Tab
+TypeText "skilled",Tab
+TypeText "t",Tab
+
+
+

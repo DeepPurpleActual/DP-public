@@ -1,0 +1,79 @@
+﻿
+global LoginUser
+
+Repeat until ImageFound("WindowsStartButton_1") or ImageFound("WindowsStartButton_2") or ImageFound("StartIcon")
+	Log "Looking for Windows button."
+End repeat
+
+
+TypeText WindowsKey,"r"
+TypeText "cmd",Return
+TypeText "whoami > c:\temp\output.txt", returnKey
+Wait 1
+If ImageFound(1, "CMD_Close") or ImageFound(1, "CMD_Close1") Then
+	Click FoundImageLocation()	
+End If
+
+TypeText WindowsKey,"r"
+TypeText "c:\temp\output.txt", return
+TypeText controlKey & "a"
+TypeText controlKey & "c"
+TypeText altKey & F4
+
+put RemoteClipboard() into UserNameFile
+split UserNameFile by "\"
+put item 2 of UserNameFile into LoginUser
+
+put line 1 of LoginUser into LoginUser
+log LoginUser
+
+(*
+If ImageFound(5, "CMD_HyperspaceTST1") then
+	Set LoginUser to "HyperspaceTST1"
+else
+	If ImageFound("CMD_HyperspaceTST2") then
+		Set LoginUser to "HyperspaceTST2"
+	else
+		If ImageFound("CMD_HyperspaceTST3") then
+			Set LoginUser to "HyperspaceTST3"
+		else
+			If ImageFound("CMD_HyperspaceTST4") then
+				Set LoginUser to "HyperspaceTST4"
+			else
+				If ImageFound("CMD_HyperspaceTST5") then
+					Set LoginUser to "HyperspaceTST5"
+				else
+					If ImageFound("CMD_HyperspaceTST6") then
+						Set LoginUser to "HyperspaceTST6"
+					else
+						If ImageFound("CMD_HyperspaceTST7") then
+							Set LoginUser to "HyperspaceTST7"
+						else
+							If ImageFound("CMD_HyperspaceTST8") then
+								Set LoginUser to "HyperspaceTST8"
+							else
+								If ImageFound("CMD_HyperspaceTST9") then
+									Set LoginUser to "HyperspaceTST9"
+								else
+									Set LoginUser to "HyperspaceTST10"
+								End If
+							End If
+						End if
+					End if
+				End if
+			End If
+		End If
+	End if
+End if
+*)
+
+If LoginUser is empty then
+	Set LoginUser to "Hyperspace10"
+End If
+
+
+
+//Click "CMD_Close"
+
+
+Log LoginUser

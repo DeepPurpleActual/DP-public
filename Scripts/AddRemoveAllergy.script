@@ -1,0 +1,36 @@
+//Add Alcohol Allergy
+Repeat while ImageFound(5, "Admission")
+	Click FoundImageLocation()
+	Wait 3
+End repeat
+
+Click (Image:"Allergies",WaitFor:30)
+Wait 1
+TypeText "Alcohol",Return
+Wait 1
+TypeText Return
+Wait 1
+TypeText "1",Return
+Wait 10
+Click (Text:"Accept",WaitFor:30)
+Wait 1
+TypeText OptionKey,"r"
+
+
+//Remove Alcohol Allergy
+//Click "Allergies"
+Wait 6
+DoubleClick (Image:"Alcohol", WaitFor:20)
+TypeText OptionKey,"l"
+TypeText "100",Tab,OptionKey,"a"
+(*
+TypeText tabKey,tabKey,Return
+if ImageFound(Image:"Reconcileoutsideallergies", WaitFor:10) then 
+	click FoundImageLocation()	
+	Click (Image:"Admission", WaitFor:10)
+end if
+Wait 1 
+Wait 1
+*)
+TypeText OptionKey,"r"
+TypeText OptionKey,"n"

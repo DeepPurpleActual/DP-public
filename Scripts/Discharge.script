@@ -1,0 +1,30 @@
+﻿CommandDepot.SetSearchRectangleCommand Legend,300,200,50,50
+
+If ImageFound(20, (text:Admitted)) then
+	Click FoundImageLocation()
+End If
+
+set the searchRectangle to ()
+
+Click "Discharqe"
+Click "Dischargedate"
+TypeText "t",Tab,"n",Tab
+TypeText global CurrentPatient.MeansOfDepartureID,Tab
+TypeText global CurrentPatient.DischargeDispositionID,Tab
+TypeText global CurrentPatient.DischargeDestinationID,Tab
+TypeText OptionKey,"d"
+
+If ImageFound(2, "Continue") then
+	Click FoundImageLocation()
+End If
+
+CommandDepot.SetSearchRectangleCommand Legend,300,200,50,50
+
+If ImageFound(20, (text:"Discharged")) then
+	TypeText ControlKey,"w"
+Else
+	LogError "Patient could not be discharged"
+	Exit all
+End If
+
+set the searchRectangle to ()

@@ -1,0 +1,52 @@
+﻿If ImageFound(2, "FamilyNOA") then
+	Click "Documents"
+	
+	set the SearchRectangle = (Documents_UL,Documents_LR)
+	
+	Click "InsuranceCards"
+	TypeText Tab,Tab,"10",Tab,Tab
+	MoveTo (400,400)
+	
+	Click "PhotoID"
+	TypeText Tab,Tab,"10",Tab,Tab
+	MoveTo (400,400)
+	
+	If global CurrentPatient.FacAbbrev is not "HBR" then
+		Click "PharmBenefitCard"
+		TypeText Tab,Tab,"10",Tab,Tab
+		MoveTo (400,400)
+	End If
+	
+	Click "NPPAcknowledge"
+	TypeText Tab,Tab,"10",Tab,Tab
+	MoveTo (400,400)
+	
+	if global G_LoginDeptType <> "regreg" then
+		Click "PatientRights"
+		TypeText Tab,Tab,"10",Tab,Tab
+		MoveTo (400,400)
+		
+		Repeat until ImageFound(1, "EDSurgInptGCT")
+			Click "ScrollbarDownArrow"
+		End repeat
+		
+		Click "EDSurgInptGCT"
+		TypeText Tab,Tab,"10",Tab,Tab
+	end if
+	
+	if global currentPatient.FinancialClass = "Self Pay" then
+		
+		Repeat until ImageFound(1, "FinancialAssistance")
+			Click "ScrollbarDownArrow"
+		End repeat
+		
+		Click "FinancialAssistance"
+		TypeText Tab,Tab,"10",Tab,Tab
+		
+	end if
+	
+Else
+	
+End If
+
+set the searchRectangle = ()

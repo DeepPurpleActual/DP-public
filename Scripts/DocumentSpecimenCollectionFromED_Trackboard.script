@@ -1,0 +1,23 @@
+﻿run CommandDepot.SetSearchRectangleCommand ED_TrackBoardPatientHeader, 325, 800, 0, 0
+Log "This is a rectangle"
+DoubleClick (text:"Inttest, Twofourfourtwo C")
+Set the searchRectangle to ()
+
+run CommandDepot.SetSearchRectangleCommand EDNarratorHeader, 350, 850, -5, 20
+Repeat until ImageFound("CBCwDifferentia")
+	Repeat 3 times
+		Click (Image:"DownArrow", WaitFor:5)
+	End Repeat
+	Wait 1
+	Click "CBCwDifferentia"
+End Repeat
+
+TypeText OptionKey,"p"
+Click "Scanthelabelorclicktodocument"
+TypeText OptionKey,"f"
+TypeText "barcode unreadable",Tab
+TypeText OptionKey,"a"
+TypeText "barcode unreadable",Tab
+TypeText OptionKey,"a"
+TypeText OptionKey,"a"
+

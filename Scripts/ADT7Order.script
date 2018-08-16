@@ -1,0 +1,57 @@
+﻿Set the SearchRectangle to ("PatientStationList_A","PatientStationList_B")
+
+If ImageFound("PatientStationCurrent") then
+	Click FoundImageLocation()
+End If
+
+Click (Text:"Admitted")
+
+Set the SearchRectangle to ()
+
+Click "OpenChart"
+
+If ImageFound(Image:"PrimaryProviderTeamismissing", WaitFor:10) then
+	Click "Dismiss"
+End If
+
+Click "Orders_Icon"
+
+If ImageFound(Image:"AllergiesActivity", WaitFor:15) then
+	Click FoundImageLocation()
+	AddRemoveAllergy
+	Click "Orders_Icon"
+End If
+
+TypeText "adt7",Return
+
+Click (Text:"Transfer patient", WaitFor:10)
+
+TypeText optionKey,"a"
+
+TypeText "MDG",Return,Tab
+TypeText global CurrentPatient.AdmitProviderID,Tab
+TypeText "intensive care",Tab
+TypeText "medical necessity",Tab
+Click "NoButton"
+TypeText Tab,Tab,Tab,Tab
+TypeText global CurrentPatient.ProviderCareTeamID,Tab
+TypeText optionKey,"a"
+
+If ImageFound(Image:"Treatmentteam_selected", WaitFor:20) then
+	Click FoundImageLocation()
+End If
+
+If ImageFound(Image:"Nearby_selected", WaitFor:1) then
+	Click FoundImageLocation()
+End If
+
+TypeText optionKey,"s"
+Wait 1
+TypeText global CurrentPatient.AdmitProviderID,Tab
+TypeText OptionKey,"a"
+
+If ImageFound(2, "OrderandOrderSetSearch") then
+	Click (Text:"Cancel")
+	
+End If
+

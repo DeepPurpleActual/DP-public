@@ -1,0 +1,30 @@
+﻿global CurrentPatient
+
+Click "Clickheretoaddaguarantor"
+
+if global CurrentPatient.GuarantorRelationship = "father" or global CurrentPatient.GuarantorRelationship = "mother" or global CurrentPatient.GuarantorRelationship = "spouse" then
+	Click (Text:global CurrentPatient.GuarantorRelationship)
+Else
+	Click (Text:"Other",CaseSensitive:"yes")
+	TypeText tab
+	TypeText global CurrentPatient.GuarantorRelationship,tab
+end if 
+
+Click "NameID"
+TypeText global CurrentPatient.GuarantorName,tab
+TypeText "000000000",Tab
+
+Click "sex"
+TypeText global CurrentPatient.GuarantorSex,Tab,global CurrentPatient.GuarantorDOB
+TypeText Tab
+
+TypeText OptionKey,"w"
+
+TypeText OptionKey,"u"
+TypeText OptionKey,"u"
+
+If ImageFound(Image:"ReasonforIdentityChange", WaitFor:2) then
+	TypeText "104",Tab,OptionKey,"o"
+End If
+
+

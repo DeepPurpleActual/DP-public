@@ -1,0 +1,26 @@
+﻿If ImageFound(Image:"Failedtoactivate", WaitFor:10) Then
+	Click OK_Button
+End If
+
+Click "ReadyforRegIdentify"
+
+run CommandDepot.SetSearchRectangleCommand ED_TrackBoardPatientHeader, 300, 700, 0, 0
+Click (Text:"Inttest, Twofourfourtwo C")
+set the searchrectangle to ()
+Click "Registration_1"
+
+Click (Image:"EmergencyVisitInfo", WaitFor:4.9)
+Click Pointoforigin
+TypeText "1",Tab //home
+Click ReferralSource
+TypeText global CurrentPatient.PCP,Tab,Tab,Tab
+TypeText "no",Tab
+TypeText "abdominal pain",Tab
+
+Click "ClaimInfo"
+Click "OccurrenceCode"
+TypeText "11",Tab,"t",Tab
+
+VerifyFromRegistrationSidebar
+
+TypeText OptionKey,"f"

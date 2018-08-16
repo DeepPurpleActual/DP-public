@@ -1,0 +1,654 @@
+﻿(*
+DoubleClick "HomeHealthIconTST"
+
+Repeat until ImageFound(1, "RC_LogIn")
+	Wait 1
+End repeat
+
+(*set global CurrentPatientVisit.ApptProvider1 to EPHHSLP*)
+
+TypeText global CurrentPatientVisit.ApptProvider1,Tab
+TypeText "EggplantTST!"
+TypeText OptionKey,"l"
+
+Repeat until ImageFound("SyncOptions")
+	Wait 1
+End repeat
+
+run CommandDepot.SetSearchRectangleCommand Newmessages, 300, 20, 150, -3
+Repeat until ImageFound(text:"Connected")
+	Wait 1
+End repeat
+set the searchRectangle to ()
+Click "SyncOptions"
+Click "TodaysPatients"
+TypeText OptionKey,"a"
+Wait 3
+run CommandDepot.SetSearchRectangleCommand Newmessages, 300, 20, 150, -3
+Repeat until ImageFound(text:"Connected")
+	Wait 1
+End repeat
+set the searchRectangle to ()
+
+Log "All of My Patients are synced"
+
+//Need some logic for finding patients here
+Click "RC_Schedule"
+
+Repeat until ImageFound("TBD_ColumnHeader")
+	Wait 1
+End repeat
+
+(*set global CurrentPatientVisit.ApptTime1 to "0300"*)
+
+if the first character of global CurrentPatientVisit.ApptTime1 is "0" then
+	set tempAMPM to "a"
+	set tempSearchHour to the second character of global CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+else
+	set tempAMPM to "p"
+	set tempSearchHour to the first two characters of global CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+end if
+
+set tempSearchTime to tempSearchHour & ":" & tempSearchMinute & tempAMPM
+
+log tempSearchTime
+
+run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 750, 0, 0
+
+Repeat until ImageFound(.5, (text:tempSearchTime, Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"0123456789:ap"))
+	set the SearchRectangle to ()
+	Click "ScrollbarDownArrow"
+	run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 750, 0, 0
+end repeat
+
+set tempAppointmentBlock to FoundImageLocation() + (30,5)
+
+DoubleClick tempAppointmentBlock
+
+set the searchRectangle to ()
+
+if ImageFound(5, "RC_NoVisitSet") then
+	TypeText Return
+end if
+
+
+if ImageFound(5, "RC_NotSelectedPatient") then
+	TypeText Return
+	TypeText Tab,"t",Tab,OptionKey,"a"
+end if
+
+log FoundImageLocation()
+
+log "Search rectangle has been drawn."
+
+(*set global CurrentPatientVisit.TOS_ID to "15"
+set global CurrentPatientVisit.ApptTime1 to "0300"*)
+
+if the first character of global CurrentPatientVisit.ApptTime1 is "0" then
+	set tempAMPM to "a"
+	set tempSearchHour to the second character of global CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+else
+	set tempAMPM to "p"
+	set tempSearchHour to the first two characters of global CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+end if
+
+set tempSearchTime to tempSearchHour & ":" & tempSearchMinute & tempAMPM
+set tempDrivingStart to tempSearchTime - 12 minutes
+set tempDrivingEnd to tempSearchTime - 2 minutes
+set tempVisitStart to tempSearchTime - 1 minutes
+set tempVisitEnd to tempSearchTime + 14 minutes
+
+log tempSearchTime
+log tempDrivingStart
+log tempDrivingEnd
+log tempVisitStart
+log tempVisitEnd
+
+//Complete Admin form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 0
+Click (Text:"Admin")
+Wait 1
+set the searchRectangle to ()
+TypeText global CurrentPatientVisit.TOS_ID,Tab
+TypeText tempDrivingStart,Tab,Tab
+TypeText tempDrivingEnd,Tab,Tab
+TypeText tempVisitStart,Tab,Tab
+TypeText tempVisitEnd,Tab,Tab
+TypeText "10",Tab
+*)
+
+//Complete Remote Client Demographics and Advanced Demographics form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"Demographics")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_DemographicsPatientTrackingSheet_A, 500, 500, 0, 0
+Click (Text:"PCP")
+Click "Startofcaredate"
+TypeText global CurrentPatientVisit.VisitDate,Tab
+TypeText OptionKey,"n"
+if ImageFound("RC_Asian_Selected") then
+	set the searchRectangle to ()
+Else
+	Click "Asian"
+	set the searchRectangle to ()
+end if
+
+//Complete Payment Information form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"Payment Information")
+Wait 1
+set the searchRectangle to ()
+Click "RC_Medicare"
+
+//Complete Remote Client M0080
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M0080")
+Wait 1
+set the searchRectangle to ()
+If ImageFound(5, "RC_M0080DisciplineofPersonCompletingAssessment") then
+	run CommandDepot.SetSearchRectangleCommand RC_M0080DisciplineofPersonCompletingAssessment, 1000, 150, 0, 0
+	Click "Next/Next"
+	Wait 2
+End If
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M0090DateAssessmentCompleted, 1000, 150, 0, 0
+Click "DateAssessmentCompleted"
+TypeText global CurrentPatientVisit.VisitDate,Tab
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M0100ThisAssessmentisCurrentlyBeingCompleted, 1000, 450, 0, 0
+Click "RC_StartOfCare"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M0102DateofPhysicianorderedStartofCare, 1000, 150, 0, 0
+Click "RC_NoSpecificSOC"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M0104DateofReferral, 1000, 150, 0, 0
+Click "RC_ReferralDate"
+TypeText "t-7",Tab
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M0110EpisodeTiming, 1000, 150, 0, 0
+Click "1Early"
+Wait 2
+set the searchRectangle to ()
+
+
+
+
+//Complete Remote Client M1100 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1100", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1100PatientLivingSituation, 1000, 350, 0, 0
+Click "RC_Block09"
+Wait 2
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1000 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1000", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1000InpatientFacilities, 1000, 350, 0, 0
+Click "RC_ShortStay"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1005InpatientDischargeDate, 1000, 150, 0, 0
+TypeText "t-3",Tab
+Wait 2
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1011 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1011", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand M1011InpatientDiagnoses, 1000, 350, 0, 0
+TypeText "g45.9",Tab
+TypeText OptionKey,"d"
+Wait 1
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1017DiagnosesRequiringMedicalChanges, 1000, 350, 0, 0
+Click "RC_NA"
+Wait 2
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1018 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1018", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1018ConditionsPriortoMedicalRegimenChange, 1000, 350, 0, 0
+Click "RC_None"
+Wait 2
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1021 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1021", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+TypeText "g45.9",Tab
+Click "AddGreenPlus"
+TypeText OptionKey,"d"
+run CommandDepot.SetSearchRectangleCommand RC_M1021PrimaryDiagnosis, 1000, 170, 0, 0
+Click (Image:"RC_SymptomControlRating", WaitFor:2.5)
+TypeText "2",Tab
+TypeText "on",Tab,"t-14",Tab
+TypeText OptionKey,"a"
+Wait 2
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1028 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1028", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1028ActiveDiagnosesComorbidities, 1000, 170, 0, 0
+repeat with EveryImageLocation(RC_No)
+	log it
+	log it - (10,10)
+	set UL_Search to it - (22,3)
+	set LR_Search to it + (0,17)
+	set the searchRectangle to (UL_Search,LR_Search)
+	if ImageFound("CheckBoxFlatUnselected") then
+		click FoundImageLocation()
+	end if
+end repeat
+set the SearchRectangle to ()
+
+//Complete Remote Client M1030 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1030", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1030Therapies, 1000, 210, 0, 0
+Click "RC_None"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1033RiskforHospitalization, 1000, 450, 0, 0
+Click "RC_None"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1034OverallStatus, 1000, 450, 0, 0
+Click "RC_PatientTemporarilyAtRisk"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1036RiskFactors, 1000, 450, 0, 0
+Click "RC_None"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1060HeightandWeight, 1000, 450, 0, 0
+Click "Heightininches"
+TypeText "63",Tab,"165",Tab
+Wait 2
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1200 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1200", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1200Vision, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1210AbilitytoHear, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1220UnderstandingofVerbalContent, 1000, 250, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1230SpeechandOral, 1000, 300, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1240PainAssessment, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1242FrequencyofPainInterfering, 1000, 250, 0, 0
+Click "RC_Block1"
+set the searchRectangle to ()
+
+//Complete Remote Client M1700 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1700", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1700CognitiveFunctioning, 1000, 250, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1710WhenConfused, 1000, 275, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1720WhenAnxious, 1000, 275, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_PHQ, 1000, 275, 0, 0
+Click "RC_Block0"
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1730DepressionScreening, 1000, 250, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1740CognitiveBehavioralandPsychiatric, 1000, 275, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1745FrequencyofDisruptiveBehavior, 1000, 275, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1750PsychiatricNursingServices, 1000, 210, 0, 0
+Click "RC_Block0"
+set the searchRectangle to ()
+
+//Complete Remote Client M1400 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1400", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1400ShortofBreath, 1000, 250, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1410RespiratoryTreatmentsutilizedathome, 1000, 400, 0, 0
+Click "RC_None"
+set the searchRectangle to ()
+
+
+//Complete Remote Client M1600 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1600", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1600UrinaryTractInfection, 1000, 300, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1610UrinaryIncontinenceorUrinaryCatheterPresence, 1000, 300, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1620BowelIncontinenceFrequency, 1000, 400, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1630OstomyforBowelElimination, 1000, 400, 0, 0
+Click "RC_Block0"
+set the searchRectangle to ()
+
+//Scroll down in list
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Repeat until ImageFound(1, (text:M2200))
+	Set the searchRectangle to ()
+	Set the SearchRectangle to ("CloseEncounterArea_A","CloseEncounterArea_B")
+	Repeat 3 times
+		Click "ScrollbarDownArrow"
+	End repeat
+	Set the searchRectangle to ()
+	run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+End repeat
+Set the searchRectangle to ()
+
+//Complete Remote Client M1300 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1300", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1300PressureUlcerAssessment, 1000, 200, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1302RiskofDevelopingPressureUlcers, 1000, 150, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1306UnhealedPressureUlceratStage2, 1000, 210, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1322CurrentNumberofStage1PressureUlcers, 1000, 300, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1324StageofMostProblematicUnhealedPressureUlcer, 1000, 300, 0, 0
+Click "RC_NA"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1330StasisUlcer, 1000, 210, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1340SurgicalWound, 1000, 210, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1350SkinLesionorOpenWound, 1000, 210, 0, 0
+Click "RC_Block0"
+Wait 2
+set the searchRectangle to ()
+
+//Complete Remote Client M1800 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1800", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1800Grooming, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1810AbilitytoDressUpperBody, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1820AbilitytoDressLowerBody, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1830Bathing, 1000, 400, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1840ToiletTransferring, 1000, 300, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1845ToiletingHygiene, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1850Transferring, 1000, 300, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+run CommandDepot.SetSearchRectangleCommand RC_SOCROCPerformance, 100, 750, 0, 0
+Click "RC_Block05"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_DischargeGoal, 100, 750, 0, 0
+Click "RC_Block06"
+set the searchRectangle to ()
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1860AmbulationLocomotion, 1000, 300, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1870FeedingorEating, 1000, 300, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1880AbilitytoPlanandPrepareMeals, 1000, 210, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1890AbilitytoUseTelephone, 1000, 450, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_NeededSomeHelp, 100, 250, 0, 0
+repeat with EveryImageLocation(RC_Block1)
+	log it
+	log it - (10,10)
+	set UL_Search to it - (12,12)
+	set LR_Search to it + (6,9)
+	set the searchRectangle to (UL_Search,LR_Search)
+	if ImageFound("CheckBoxFlatUnselected") then
+		click FoundImageLocation()
+	end if
+end repeat
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1900PriorFunctioningADLIADL, 1000, 450, 0, 0
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M1910FallRiskAssessment, 1000, 210, 0, 0
+Click "RC_Block1"
+Wait 2
+set the searchRectangle to ()
+
+//Complete Remote Client M2001 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M2001", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2001DrugRegimenReview, 1000, 210, 0, 0
+Click "RC_Block0"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2010PatientCaregiverHighRiskDrugEducation, 1000, 210, 0, 0
+Click "RC_NA"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2020ManagementofOralMedications, 1000, 250, 0, 0
+Click "RC_NA"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2030ManagementofInjectableMedications, 1000, 250, 0, 0
+Click "RC_NA"
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2040PriorMedicationManagement, 1000, 200, 0, 0
+Click "RC_Block1"
+Click "RC_Block1"
+set the searchRectangle to ()
+
+//Complete Remote Client M2102 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M2102", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2102TypesandSourcesofAssistance, 1000, 1000, 0, 0
+Repeat 7 times
+	Click "RC_Block1"
+End repeat
+Click "Next/Next"
+Wait 2
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2110ADLorIADLAssistance, 1000, 250, 0, 0
+Click "RC_Block1"
+Click "Next/Next"
+set the searchRectangle to ()
+
+//Complete Remote Client M2200 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 850, -5, 0
+Click (Text:"M2200", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+Wait 1
+set the searchRectangle to ()
+TypeText "15",Tab
+Click "Next/Next"
+run CommandDepot.SetSearchRectangleCommand RC_M2250A, 250, 100, 200, 0
+Click "RC_Block1"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2250B, 250, 100, 200, 0
+Click "RC_NA"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2250C, 250, 100, 200, 0
+Click "RC_Block1"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2250D, 250, 100, 200, 0
+Click "RC_NA"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2250E, 250, 100, 200, 0
+Click "RC_NA"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2250F, 250, 100, 200, 0
+Click "RC_NA"
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_M2250G, 250, 100, 200, 0
+Click "RC_NA"
+set the searchRectangle to ()
+Click "Next/Next"
+
+set global c_VisitNumber = global c_VisitNumber + 1
+
+
+
+

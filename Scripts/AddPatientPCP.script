@@ -1,0 +1,11 @@
+﻿global CurrentPatient
+
+Click "AddGreenPlus"
+TypeText global CurrentPatient.pcp,Tab
+If ImageFound(2, "MultipleLocationPCP") then
+	Click FoundImageLocation()
+End If
+Click "PCP_Start"
+TypeText "mb",Tab
+TypeText OptionKey,"a"
+Click (Image:"CloseX_new", WaitFor:32)

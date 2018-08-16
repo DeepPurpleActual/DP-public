@@ -1,0 +1,63 @@
+﻿global ZephyrID
+global SuiteFolder
+
+global MRN
+global SchedDeptID
+global SchedDeptName
+global ApptDeptID
+global ApptDeptName
+global LabDeptID
+global LabDeptName
+global ADT_RegDeptID
+global ADT_RegDeptName
+global ED_DeptID
+global ED_DeptName
+global BedDeptID
+global BedDeptName
+global SurgDeptID
+global SurgDeptName
+global PxDeptName
+global PxDeptID
+global Room
+global Bed
+global FacAbbrev
+global VisitType
+
+
+if global ZephyrID =""
+	set global ZephyrID = "EIT-2806"
+end if
+
+put items 1 to -2  delimited by "/" of my folder into SuiteFolder
+
+set ScriptOwner to "david.hester@unchealth.unc.edu"
+
+set ScriptFileLocation to global SuiteFolder & "/data_files/data_" & global ZephyrID & ".txt"
+log ScriptFileLocation
+
+
+repeat with thedata = each line of file(ScriptFileLocation)
+	put item 1 of thedata into global MRN
+	put item 2 of thedata into global SchedDeptID
+	put item 3 of thedata into global SchedDeptName
+	put item 4 of thedata into global ApptDeptID
+	put item 5 of thedata into global ApptDeptName
+	put item 6 of thedata into global LabDeptID
+	put item 7 of thedata into global LabDeptName
+	put item 8 of thedata into global ADT_RegDeptID
+	put item 9 of thedata into global ADT_RegDeptName
+	put item 10 of thedata into global ED_DeptID
+	put item 11 of thedata into global ED_DeptName
+	put item 12 of thedata into global BedDeptID
+	put item 13 of thedata into global BedDeptName
+	put item 14 of thedata into global SurgDeptID
+	put item 15 of thedata into global SurgDeptName
+	put item 16 of thedata into global PxDeptName
+	put item 17 of thedata into global PxDeptID
+	put item 18 of thedata into global Room
+	put item 19 of thedata into global Bed
+	put item 20 of thedata into global FacAbbrev
+	put item 21 of thedata into global VisitType
+end repeat
+
+log "Complete"

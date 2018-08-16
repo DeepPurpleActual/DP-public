@@ -1,0 +1,8 @@
+﻿//Completes Accommodations form
+Click (Text:"Accommodations",WaitFor:15)
+TypeText tabKey
+TypeText "n-1",tabKey,tabKey,tabKey,tabKey
+TypeText global room
+(*TypeText global bed,tab*)
+TypeText tabKey,tabKey,tabKey
+TypeText "1",tabKey

@@ -1,0 +1,81 @@
+﻿(*global ordept
+global mrn
+global provider
+global startdate
+global procedure
+global laterality
+global orroom
+global revenuelocation
+global surgerytime
+global dept
+global wing
+
+If global ordept ="" then
+	put 1051294001008 into global ordept	
+End If
+
+If global mrn ="" then
+	put 100000378214 into global mrn
+End If
+
+If global provider ="" then
+	put 73301 into global provider	
+End If
+
+If global startdate ="" then
+	put "t" into global startdate	
+End If
+
+If global procedure ="" then
+	put 45380 into global procedure	
+End If
+
+If global laterality ="" then
+	put "n/a" into global laterality	
+End If
+
+If global orroom ="" then
+	put "OR 04" into global orroom	
+End If
+
+If global revenuelocation ="" then
+	put 1070002 into global revenuelocation	
+End If
+
+If global surgerytime ="" then
+	put "1445" into global surgerytime	
+End If
+
+If global dept ="" then
+	put "1051000000003" into global dept	
+End If*)
+if global mrn = "" then
+	global dept
+	global mrn
+	global wing
+	global room
+	global bed
+	global abbrev
+	global roomed
+	global ScriptOwner
+	global SuiteFolder
+	
+	put items 1 to -2  delimited by "/" of my folder into SuiteFolder
+	
+	set ScriptOwner to "david.hester@unchealth.unc.edu"
+	
+	set thedata = line 1 of file(SuiteFolder & "/data_files/AdmissionValidation.txt")
+	
+	put item 1 of thedata into dept
+	put item 2 of thedata into mrn
+	put item 3 of thedata into wing
+	put item 4 of thedata into room
+	put item 5 of thedata into bed
+	put item 6 of thedata into abbrev
+	
+end if
+
+
+If global ZephyrID = "" Then
+	set global ZephyrID to "EIT-2817"
+end if

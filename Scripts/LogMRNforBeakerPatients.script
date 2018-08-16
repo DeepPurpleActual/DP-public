@@ -1,0 +1,45 @@
+﻿put file ResourcePath("beaker_abntest_4_mrn.txt") into thedata
+put items 1 to -2  delimited by "/" of my folder into SuiteFolder
+Set global File_r = SuiteFolder & "/data_files/beaker_medicare.txt"
+log global File_r
+
+//log thedata
+
+put (the number of lines of thedata) -1 into max
+put (the number of items of line 1 of thedata) into varmax
+
+put line 1 of thedata into variable_names
+log variable_names
+
+open file global File_r
+repeat max times
+	log repeatIndex()
+	put item 1 of line repeatIndex()+1 of thedata into e_number
+	set line_number = repeatIndex()+1
+	put line line_number of thedata into variable_values
+	put item 1 of variable_names into variable_name
+	put variable_values into global testpatient.(variable_name)
+	put global testpatient.(variable_name) into global mrn
+	run Patient
+	set global testpatient.mrn to ReadText(("HeaderMRN",(380,90)))
+	log global testpatient.mrn
+	TypeText ControlKey,"w"
+	write global testpatient.(variable_name) & "," & global testpatient.mrn & return to file global File_r at eof
+end repeat
+close file global File_r
+
+
+//log variable_values
+(*
+repeat varmax times
+	put item repeatIndex() of variable_names into variable_name
+	put item repeatIndex() of variable_values into testpatient.(variable_name)
+	put testpatient into global testpatient
+	log testpatient.e_number
+	// if running for multiple patients, workflow script name belongs here
+end repeat
+
+
+log "Complete"
+*)
+

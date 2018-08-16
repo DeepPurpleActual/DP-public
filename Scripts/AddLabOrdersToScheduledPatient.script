@@ -1,0 +1,23 @@
+﻿Click (Image:"ScheduleTab", WaitFor:37)
+Set the SearchRectangle to ("ScheduleTree_A","ScheduleTree_B")
+Click (Text:"UNC Family")
+Set the searchRectangle to ()
+DoubleClick (Image:"O300PMInttestNinesixA33yoF", WaitFor:309)
+Click "OrderEntry"
+
+TypeText "tsh",Tab
+TypeText OptionKey,"a"
+TypeText "lab320",Tab
+TypeText OptionKey,"a"
+Click "ResearchAssociation"
+TypeText " ",Tab," ",Tab
+
+TypeText OptionKey,"a"
+
+Click "AddDiagnosis"
+TypeText "z00.6",Tab
+TypeText OptionKey,"a"
+Click (Image:"AssociateAll_1", WaitFor:36)
+Click "SignNav"
+TypeText "verbal with readback",Tab
+TypeText OptionKey,"a"

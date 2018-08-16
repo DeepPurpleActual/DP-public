@@ -1,0 +1,80 @@
+﻿run CommandDepot.StartRecordingThisScript FindABedInBedPlanning
+
+set BedPlanningSearchRectangle to (ImageLocation("BedPlanningHeader"),ImageLocation("BedPlanningFooter"))
+
+
+Repeat until ImageFound(Image:"LocationsIManage", WaitFor:3) = True
+	set the searchRectangle to BedPlanningSearchRectangle
+	Click "Wrench"
+	set the searchRectangle to ()
+End repeat
+
+set LocationsIManageSearchRectangle to (ImageLocation("LocationsIManage"),ImageLocation("ExpectedPatientMoves"))
+
+set the searchRectangle to LocationsIManageSearchRectangle
+
+//Clears existing locations
+repeat with EveryImageLocation("CheckBoxFlatSelected")
+	Click (it)
+end repeat
+
+repeat with EveryImageLocation((Text:global CurrentPatient.FacAbbrev))
+	log it
+	log it - (10,10)
+	set UL_Search to it - (40,10)
+	set LR_Search to it + (0,10)
+	set the searchRectangle to (UL_Search,LR_Search)
+	if ImageFound("CheckBoxFlatUnselected") then
+		click FoundImageLocation()
+	end if
+end repeat
+
+set the searchRectangle to ()
+//MoveTo "ChartSearchMagnifyingGlass"
+
+Click "ChartSearchMagnifyingGlass"
+If ImageFound(2, "ChartSearchMagnifyingGlassWOCursor") then
+	Click FoundImageLocation()
+End If
+
+//Click "ChartSearchMagnifyingGlass"
+TypeText global CurrentPatient.mrn,Return
+
+set the searchRectangle to LocationsIManageSearchRectangle
+
+Click (Image:"HeaderMRN",WaitFor: 3)
+
+set the searchRectangle to BedPlanningSearchRectangle
+
+If ImageFound("SuggestBeds") then
+	Click FoundImageLocation()
+End If
+
+Drag "HighlightedBedRequest"
+Drop "EmptyBedOnBedboard"
+
+Set the SearchRectangle to ("BedPlanningPopup_A","BedPlanningPopup_B2")
+
+set global CurrentPatient.room to CommandDepot.ReadTextOnSameLineAsImageForGivenDistance(BedPlanningPopupSlash,-50,yes,100,"1234567890/") 
+delete every occurrence of "/" in global CurrentPatient.room
+log global CurrentPatient.room
+
+set mytempbedunit to CommandDepot.ReadTextOnSameLineAsImageForGivenDistance(BedPlanningPopupSlash,200,yes,100) 
+log mytempbedunit
+split mytempbedunit by "in"
+set global CurrentPatient.bed to trim(item 1 of mytempbedunit)
+set global CurrentPatient.BedDeptID to trim(item 2 of mytempbedunit)
+
+put global CurrentPatient.room into "room" of the record of global myTestPatients where "RecNumber" = global RecordCountCounter
+put global CurrentPatient.bed into "bed" of the record of global myTestPatients where "RecNumber" = global RecordCountCounter
+put global CurrentPatient.BedDeptID into "BedDeptID" of the record of global myTestPatients where "RecNumber" = global RecordCountCounter
+
+Click "AccommodationCode"
+
+TypeText "1",Tab
+TypeText optionKey,"a"
+
+set the searchRectangle to ()
+
+run CommandDepot.StopRecordingThisScript
+

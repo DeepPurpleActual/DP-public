@@ -1,0 +1,64 @@
+﻿TypeText "epfammd",Tab
+TypeText "EggplantTST!",Tab
+TypeText Return
+
+Run "set preferences"
+
+//Add review steps
+
+Click "NotesTabClinical"
+
+//Add review steps
+
+Click "PlanTab"
+
+Click "VisitDiagnoses"
+
+TypeText "z00.6",Tab
+
+run CommandDepot.SetSearchRectangleCommand VisitDiagnosesHeader, 50, 20, 150, 40
+Click "AddGreenPlus"
+set the searchRectangle to ()
+TypeText OptionKey,"a"
+
+Click "MedicationsOrders_NewOrder"
+TypeText "tsh"
+TypeText Return
+TypeText OptionKey,"a"
+
+TypeText "lab320"
+TypeText Return
+TypeText OptionKey,"a"
+Click "ResearchAssociation_1"
+
+TypeText spacebar, downArrow, spacebar
+
+TypeText OptionKey,"a"
+Click (Image:"Associate", WaitFor:22)
+TypeText OptionKey,"l"
+TypeText OptionKey,"a"
+
+TypeText OptionKey,"g"
+
+Click "NotesTabClinical"
+TypeText OptionKey,"o"
+TypeText "This should be the second note on this patient. This is the one from the physician."
+TypeText OptionKey,"a"
+
+Click "WrapUp"
+TypeText "These are patient instructions: take lots of naps, but not at work."
+
+Click (Image:"LOS_EST3", WaitFor:9.7)
+Click "FollowUp_3Months"
+Click "FollowUp_Recheck"
+
+Click "Searchfornewcharge"
+TypeText "A6448",Tab
+Click "AddGreenPlus"
+TypeText OptionKey,"a"
+
+Click "SignVisit"
+
+If ImageFound("Warnings") then
+	TypeText OptionKey,"a"
+End If

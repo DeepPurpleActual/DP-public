@@ -1,0 +1,35 @@
+﻿run CommandDepot.StartRecordingThisScript AdmitPatientFromConfirmedPreadmission
+
+//Starts admission process
+if ImageFound(Text:"Adm", WaitFor:5) then
+	Click FoundImageLocation()
+else
+	Click(Text:"Discharged")
+	TypeText  ControlKey,HomeKey
+end if
+
+TypeText optionKey,"d"
+
+Run "Complete Encounter Info Form"
+
+Complete_Accommodations_Form
+
+//Run "Complete Checklist Verification"
+Run "VerifyFromRegistrationSidebar"
+
+//Admits patient
+Click (Image:"Admit", WaitFor:10)
+
+If ImageFound(2, "Continue")
+	Click FoundImageLocation()
+End If
+
+If ImageFound(15, "PatientStationHighlightedAdmitted") then
+	LogSuccess "Patient has been admitted"
+	
+End If
+
+//End If
+
+run CommandDepot.StopRecordingThisScript
+

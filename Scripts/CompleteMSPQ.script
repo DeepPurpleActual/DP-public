@@ -1,0 +1,16 @@
+If ImageFound(Image:"MedicareSecondaryPayorPartI", WaitFor:5.1) then
+	TypeText "no",Tab
+	TypeText "no",Tab
+	TypeText "no",Tab
+	TypeText "no",Tab
+	TypeText OptionKey,"n"
+	TypeText "no",Tab
+	TypeText OptionKey,"n"
+	TypeText Tab
+	TypeText "no",Tab
+	TypeText OptionKey,"n"
+	TypeText "2",Tab
+	TypeText "y-1",Tab
+	TypeText "3",Tab
+	TypeText OptionKey,"f"
+End If

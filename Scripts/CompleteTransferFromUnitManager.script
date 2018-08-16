@@ -1,0 +1,19 @@
+﻿run CommandDepot.SetSearchRectangleCommand UnitManagerIncomingTransfers_A, 300, 100, 0, 0
+
+RightClick (Text:global CurrentPatient.Bed)
+
+Click (Text:"Complete Transfer")
+
+TypeText "t",Tab,"n",Tab
+
+TypeText OptionKey,"f"
+
+set the searchRectangle to ()
+
+
+
+
+
+
+
+

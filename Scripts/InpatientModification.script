@@ -1,0 +1,145 @@
+﻿GetAdHocData
+
+Log "Start Inpatient Modification"
+//Wait 15
+
+(*
+Repeat 3 times
+	if ImageFound(10,"Close_1") then
+		Click FoundImageLocation()
+	end if
+End Repeat
+*)
+
+if ImageFound(Text:"Patient Station",WaitFor:75) then
+	Click FoundImageLocation()
+else
+	Click "EpicButton"
+	//Wait 10
+	Click (text:"Patient Station",Waitfor:20)
+end if
+
+(*
+repeat 60 times
+	if ImageFound(1,"NameMRN") then
+		exit repeat
+	else
+		
+	end if
+end repeat
+
+if ImageFound(1,"Name/MRN textbox") then
+	WaitFor 10,"Name/MRN textbox"
+else
+	WaitFor 5,"PatientStation"
+	Click "PatientStation"
+	wait 2
+	repeat 60 times
+		if ImageFound(1,"Name/MRN textbox") then
+			exit repeat
+		end if
+	end repeat
+end if*)
+
+Click (Image:"NameMRN",WaitFor:60)
+
+TypeText global mrn ///////// <<< MRN GOES HERE
+
+TypeText OptionKey,"f"
+TypeText OptionKey,"s"
+
+
+(*Click (Image:"FindPatient",WaitFor:30)
+Click (Image:"Accept",WaitFor:10)*)
+
+if ImageFound(Image:"Accept",WaitFor:10) then Click FoundImageLocation()
+Wait 1
+(*
+repeat 60 times
+	if ImageFound(1,text:"Admitted") then
+		exit repeat
+	else
+		Log "waiting for Admitted"
+	end if
+end repeat
+*)
+
+Set the searchRectangle to (107,148,699,513)
+
+
+
+If ImageFound(text:"Admitted",WaitFor:65) then Click FoundImageLocation()
+
+TypeText OptionKey,"o"
+
+//If ImageFound(10,"Cancel_2") then Click FoundImageLocation()
+
+Set the searchRectangle to ()
+
+Wait 2
+
+AddRemoveAllergy
+
+// Order Discharge
+Click "Orders_Icon"
+TypeText "ADT8",Tab
+TypeText OptionKey,"w"
+Click (Image:"NewOrder", WaitFor:11.4)
+TypeText OptionKey,"y"
+TypeText OptionKey,"a"
+TypeText "t",Tab
+TypeText "n+5",Tab
+TypeText "today",Tab
+TypeText OptionKey,"a"
+
+TypeText OptionKey,"s"
+
+
+
+
+
+
+(*
+Wait 3
+Click (Image:"PlaceNewOrder", WaitFor:10)
+Click (Image:"Other", WaitFor:10)
+Wait 1
+Click (Image:"AdtOtherDischargepatient", WaitFor:2)
+Wait 2
+Click (Text:"Accept",WaitFor:5)
+
+Click (Image:"DateTime", WaitFor:4.1)
+TypeText "n",Return
+Click "Today_1"
+Click "Accept_5"
+Wait 2
+Click (Image:"Sign", WaitFor:30)
+Wait 2
+
+//Cancel Discharge Order
+Click (Image:"Discontinue", WaitFor:14.2)
+Wait 2
+Click (Image:"Sign", WaitFor:2)
+Wait 5
+If ImageFound(Image:"ErrorDiscontinuingOrders", WaitFor:10) then
+	Click "Close_1"
+End If
+
+if ImageFound(Image:"Close_1") then Click FoundImageLocation()
+If ImageFound(5, "CloseTab") then Click FoundImageLocation()
+
+
+Wait 10
+*)
+
+
+
+
+
+
+
+
+
+
+
+

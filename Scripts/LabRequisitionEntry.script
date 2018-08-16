@@ -1,0 +1,65 @@
+﻿//Requires login of bkrtech
+
+Click "ChartSearchMagnifyingGlass"
+TypeText "requisition entry"
+TypeText Return
+
+Click (Image:"Submitter", WaitFor:8.3)
+
+TypeText "909",Tab
+TypeText "100000451169",Tab
+TypeText OptionKey,"f"
+TypeText OptionKey,"a"
+
+DoubleClick "Requisitionnumber"
+TypeText controlKey,"c"
+
+set global CurrentPatient.RequisitionNumber to RemoteClipboard()
+
+Click "RegIconForLab"
+
+TypeText Tab,Tab
+TypeText "car",Tab
+TypeText "family member",Tab
+TypeText Tab,"No",Tab,"t",Tab
+TypeText Tab,"lab draw",Tab,Tab,Tab,Tab,Tab,Tab
+TypeText Tab,"consult and treat"
+TypeText OptionKey,"n"
+TypeText global TestPatient.ApptProvider1,Tab
+TypeText "pcp",Tab
+
+Click"EncounterInfo"
+
+Run VerifyFromRegistrationSidebar
+
+TypeText OptionKey,"f"
+
+Click (Image:"CodeHeader", WaitFor:4.4)
+
+TypeText "k76.6",Tab,Tab
+TypeText "2636",Tab,Tab
+TypeText "2636",Tab,Tab
+TypeText OptionKey,"6"
+TypeText "lab320",Tab
+TypeText Tab,Tab,Tab
+TypeText Tab
+TypeText "lab294",Tab,Tab,Tab,Tab
+TypeText Tab
+TypeText OptionKey,"r"
+TypeText "t",Tab,"n",Tab,"epbkrtech",Tab,Tab,Tab
+Click "AcceptAndNew"
+
+
+Run "Patient"
+
+run CommandDepot.SetSearchRectangleCommand StatusHeader, 130, 75, 0, 5
+
+//set global CurrentPatient.RequisitionNumber to "RQ6278"
+
+If ImageFound(1, (text:global CurrentPatient.RequisitionNumber)) then
+	LogSuccess "The requisition was completed correctly"
+Else
+	LogError "The requisition cannot be found"
+End If
+
+set the searchRectangle to ()

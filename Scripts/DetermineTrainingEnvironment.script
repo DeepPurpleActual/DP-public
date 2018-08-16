@@ -1,0 +1,27 @@
+﻿params EM_RootFolder,EM_EnvironmentName
+
+log EM_RootFolder
+log EM_EnvironmentName
+
+if EM_RootFolder = "" then
+	ask "Which root folder in Citrix?"
+	put it into EM_RootFolder
+	ask "In which environment are you testing?"
+	put it into EM_EnvironmentName
+	ask "What is your Starting Record?"
+	put it into global StartRecord
+end if
+
+log "GetEnvironment script begins"
+global RootFolder
+global EnvironmentName
+
+Set RootFolder to EM_RootFolder
+Set EnvironmentName to EM_EnvironmentName
+
+log global RootFolder
+log global EnvironmentName
+
+// Run "Environment Safety Net"
+
+log "GetEnvironment script ends"

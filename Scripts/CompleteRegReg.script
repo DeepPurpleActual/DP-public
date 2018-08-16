@@ -1,0 +1,15 @@
+﻿//This script completes non-contact specific registration
+
+//temporary addition until <Finish> button is fixed
+If ImageFound(1, "Accept") then
+	Click FoundImageLocation()
+Else
+	Click "RegistrationFinish"
+End if
+
+
+
+If ImageFound(5, "Registration_Warnings") then
+	Click FoundImageLocation()
+	TypeText OptionKey,"i"
+End If

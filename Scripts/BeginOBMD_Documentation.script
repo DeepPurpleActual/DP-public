@@ -1,0 +1,56 @@
+﻿Click "ChartSearchMagnifyingGlass"
+TypeText "LD Grease Board", Return
+
+run CommandDepot.SetSearchRectangleCommand ColumnHeaderName, 350, 600, 0, 0
+
+set global CurrentPatient.PatientName to "Eggplanttest,Twothreefivefour Golf"
+DoubleClick (Text:global CurrentPatient.PatientName, ignoreSpaces: On)
+
+set the searchRectangle to ()
+
+Wait 2
+Click "TriageAdmit"
+Click (Image:"AdmittoLaborandDelivery", WaitFor:5)
+Click "MedRecSign"
+Repeat until ImageFound(.5, "PlaceNewOrders")
+	Wait .5
+	Click "Next"
+End Repeat
+
+Wait .5
+
+TypeText "obg labor and delivery",Tab
+TypeText OptionKey,"a"
+Wait 1
+
+Click (Image:"PlacePatienttoLD", WaitFor:4)
+TypeText global CurrentPatient.AdmittingMD_ID,Tab
+TypeText global CurrentPatient.AdmittingMD_ID,Tab
+TypeText "Outpatient", Tab
+Click "AccommodationCode"
+TypeText "1",Tab,Tab,Tab
+TypeText "pregnant",Tab,Tab
+TypeText "304709",Tab
+TypeText OptionKey,"a"
+TypeText OptionKey,"n"
+TypeText "periop",Tab
+TypeText OptionKey,"n"
+
+Click "AccommodationCode/LowRiskofVTE"
+TypeText OptionKey,"n"
+Click "PatientFullyMobile"
+
+TypeText OptionKey,"a"
+TypeText OptionKey,"n"
+Click "ReasonforNoMechanicalVTEProphyaxis"
+Click (Image:"PatientFullyMobile_1", WaitFor:7.3)
+
+TypeText OptionKey,"a"
+
+Repeat until ImageFound("NoClippingRequired")
+	ScrollWheelDown 3
+End repeat
+
+Click FoundImageLocation()
+Click "ReviewandSign"
+Click "Sign"

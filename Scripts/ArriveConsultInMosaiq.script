@@ -1,0 +1,23 @@
+﻿Click "Schedule"
+Click "Patient"
+TypeText ControlKey,"q"
+RightClick (Text:"ER Nursing")
+Click "QueuePatient"
+TypeText "er nursing",Tab
+TypeText OptionKey,"k"
+If ImageFound("Maximize") then
+	Click FoundImageLocation()
+End If
+
+set the SearchRectangle to (ImageLocation("StatusColumnHeader"),ImageLocation("StatusColumnHeader")+(50,50))
+
+If ImageFound(1, (text:"Q", ValidCharacters: "Q")) then
+	LogSuccess "The appointment was queued"
+Else
+	LogError "The appointment was not queued"
+End If
+
+TypeText OptionKey,"l"
+
+Click "Close_X"
+

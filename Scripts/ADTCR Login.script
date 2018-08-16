@@ -1,0 +1,57 @@
+﻿GetAdHocData
+
+log "Start ADTCR Login"
+
+click (Image:"UserID",WaitFor:10)
+TypeText "epadtcr",Return
+//wait 8
+//TypeText Tab
+TypeText "EggplantTST!",Return
+
+
+If global dept not equal to "" then
+	Click "HyperspaceLogo"
+	
+	TypeText global dept,Return
+	
+	
+	wait 2
+	TypeText Return
+	
+	
+	If ImageFound(Image:"Hyperspace_FinalOK", WaitFor:2) Then
+		Click FoundImageLocation()
+	End If
+	
+	
+	
+End If
+
+If ImageFound(Image:"NowShowing", WaitFor:5) Then
+	TypeText OptionKey,"n"
+End If
+
+If ImageFound(5, "TodaysPatientsReportSettings") Then
+	Click "PrivateReport"
+	Click "Mydefaultreport"
+	TypeText OptionKey,"r"
+End if
+
+Run "Set Preferences"
+
+Run "Read Titlebar"
+
+If global TitlebarLogin contains "EPADTCR" then
+	LogSuccess "ADTCR login was successful"
+Else
+	LogError "ADTCR login was unsuccessful."
+End If
+
+(*
+if ImageFound(10, "Eggplant ADTCR_TitleBar")
+	LogSuccess "ADTCR login was successful"
+Else
+	LogError "ADTCR login was unsuccessful."
+End if
+*)
+

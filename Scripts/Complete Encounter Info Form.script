@@ -1,0 +1,20 @@
+﻿//Completes Encounter Info form
+Click (Image:"EncounterInfo",WaitFor:15)
+
+if ImageFound(Image:"PointOfOriginMissing", WaitFor:5)  or ImageFound("PointOfOriginMissingSelected")then
+	Click FoundImageLocation()
+	TypeText global CurrentPatient.PointOfOriginID,tabkey
+	TypeText global CurrentPatient.AdmissionTypeID, returnKey
+end if
+
+Click (Image:"MeansOfArrival",WaitFor:10)
+TypeText global CurrentPatient.MeansOfArrivalID,tabKey
+TypeText global CurrentPatient.EscortedByID,tabKey,tabKey
+TypeText global CurrentPatient.AccidentRelatedID,tabKey
+TypeText global CurrentPatient.OnsetDate,tabKey
+Click "FreeTextProcedures"
+TypeText global CurrentPatient.AdmittingProcedure,Tab
+Click "FreeTextDiagnoses"
+TypeText global CurrentPatient.AdmittingDiagnosis,Tab
+
+

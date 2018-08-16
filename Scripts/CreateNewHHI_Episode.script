@@ -1,0 +1,45 @@
+﻿If ImageFound(1, "EncounterSelection") then
+	
+Else
+	if global CurrentPatient.mrn = "" then
+		ask "What is the MRN?"
+		put it into LookupMRN
+	else
+		put global CurrentPatient.mrn into LookupMRN
+	end if
+	
+	
+	log "Looking up patient"
+	
+	if ImageFound(Text:"Home Health Intake",WaitFor:60) then
+		Click FoundImageLocation()
+	end if
+	
+	Click (Image:"NameMRN", WaitFor:60)
+	
+	TypeText LookupMRN ///////// <<< MRN GOES HERE
+	
+	wait 2
+	TypeText optionKey,"F"
+	
+	Wait 2
+	
+	// Changed to Alt+S for new patient lookup functionality
+	TypeText optionKey,"S"
+	Wait 2
+	if ImageFound(5,"Accept") then
+		Click "Accept"
+		
+		if ImageFound(2,"Accept") then
+			Click "Accept"
+			if ImageFound(2,"Accept") then
+				Click "Accept"
+			end if
+		end if
+	end if
+	
+	log "Finish Patient"
+End If
+
+TypeText OptionKey,"n"
+TypeText OptionKey,"a"

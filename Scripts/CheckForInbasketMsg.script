@@ -1,0 +1,38 @@
+﻿params msgtype
+
+run CommandDepot.SetSearchRectangleCommand InBasketGlanceHeader, 175, 200, 0, 0
+
+if ImageFound(2, (text:msgtype)) then
+	Click FoundImageLocation()
+else
+	LogError "InBasket Message was not received"
+end if
+
+set the searchRectangle to ()
+
+if msgtype = "Appointment Notification" then
+	run CommandDepot.SetSearchRectangleCommand SentDate, 175, 200, -25, 0
+	
+	//Remove hard code for appointment date
+	if ImageFound(2, (text:"02/12/2018")) then
+		Click FoundImageLocation()
+		LogSuccess "InBasket message for this date was located"
+		
+	else
+		LogError "InBasket Message was not received on this date"
+	end if
+	set the searchRectangle to ()
+end if
+
+if msgtype = "Post Mortem" then
+	set global testpatient.mrn to 100000416790
+	set tempPatientStatus to CommandDepot.ReadTextOnSameLine(global testpatient.mrn,InBasketCurrentStatus,15) 
+	log tempPatientStatus
+	if tempPatientStatus = "Deceased" and global DeadOrAlive = "dead" then
+		LogSuccess "Deceased message has been located"
+	end if
+	if tempPatientStatus = "Alive" and global DeadOrAlive = "alive" then
+		LogSuccess "Alive message has been located"
+	end if
+end if
+

@@ -1,0 +1,10 @@
+﻿Click (Image:"OB_Arrived", WaitFor:10)
+TypeText Tab,Tab,Tab,"triage",Tab
+TypeText "family",Tab,"car",Tab
+Click "AdmittingProvider"
+TypeText global CurrentPatient.AdmittingMD_ID,Tab
+TypeText F9
+
+If ImageFound(.5, "ConfirmationWarning") then
+	TypeText optionKey,"y"
+End If

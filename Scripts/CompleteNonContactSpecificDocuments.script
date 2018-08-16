@@ -1,0 +1,27 @@
+﻿If ImageFound(2, "FamilyNOA") then
+	
+Else
+	Click "Documents"
+	Click "InsuranceCards"
+	TypeText Tab,Tab,"10",Tab
+	Click "DocumentsSelected"
+	Click "PhotoID"
+	TypeText Tab,Tab,"10",Tab
+	Click "DocumentsSelected"
+	Click "PharmBenefitCard"
+	TypeText Tab,Tab,"10",Tab
+	Click "DocumentsSelected"
+	Click "NPPAcknowledge"
+	TypeText Tab,Tab,"10",Tab
+	Click "DocumentsSelected"
+	Click "OutpatientGCT"
+	TypeText Tab,Tab,"10",Tab
+	Click "DocumentsSelected"
+	If ImageFound(1, "PatientRights") then
+		Click "PatientRights"
+		TypeText Tab,Tab,"10",Tab
+	End If
+End If
+
+
+

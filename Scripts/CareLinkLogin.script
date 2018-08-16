@@ -1,0 +1,61 @@
+﻿TypeText WindowsDown,WindowsUp
+TypeText "chrome",Return
+if ImageFound(5, "MaximizeWindow") Then
+	Click FoundImageLocation()
+end if
+Click "ChromeRefresh"
+TypeText "http://epclinknp02/EpicCareLink-TST",Return
+TypeText "linkrn",Tab,"model",Tab
+TypeText Tab
+Click "HealthyPlanetLogInBtn"
+Click "HPLink_SelectPatient"
+TypeText "100000081651"
+TypeText Return
+Click "HPLinkPatientSelectCheck"
+Click "HPLinkOrders"
+Click "HPLinkAccept"
+Click (Image:"HPLinkPreferenceList", WaitFor:46)
+If ImageFound(Image:"HPLinkReferralOrders", WaitFor:5) Then
+	Set RO = 1
+End If
+If ImageFound("HPLinkLabOrders") Then
+	Set LO = 1
+End If
+If ImageFound("HPLinkImaging") Then
+	Set IO = 1
+End If
+If ImageFound("HPLinkGIProcedures") Then
+	Set GO = 1
+End If
+Click "HPLinkCardReferral"
+If ImageFound(10, "HPLinkAcceptOrders") Then
+	Click FoundImageLocation()
+End If
+Click (Image:"HPLinkCardReferralIncomplete", WaitFor:26)
+TypeText Tab, Tab
+TypeText "1070100375100", Tab
+Click HPLinkAccept
+
+Click "HPLinkDXAssociation"
+TypeText "chest pain"
+TypeText Return
+Click "HPLinkChestpain"
+Click "HPLinkChestpainUnspecified"
+(*If ImageFound(10, "HPLinkAccept") Then
+	Click FoundImageInfo()
+End If*)
+Click HPLinkAccept
+Click "HPLinkDXAssociateAll"
+Click HPLinkAccept
+If ImageFound(Image:"HPLinkSignOrders", WaitFor:10) Then
+	Click FoundImageLocation()
+End If
+
+If ImageFound(Image:"HPLinkSignOrders_final", WaitFor:10) Then
+	Click FoundImageLocation()
+End If
+
+Click (Image:"HPLinkLogoutBtn", WaitFor:98)
+TypeText OptionKey,F4
+
+

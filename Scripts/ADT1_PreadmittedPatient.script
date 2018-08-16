@@ -1,0 +1,60 @@
+﻿run CommandDepot.StartRecordingThisScript ADT1_PreadmittedPatient
+
+If ImageFound("PatientStationCurrent") then
+	Click FoundImageLocation()
+End If
+
+Click (Text:"Preadm")
+
+Click "OpenChart"
+
+If ImageFound(Image:"PrimaryProviderTeamismissing", WaitFor:10) then
+	Click "Dismiss"
+End If
+
+Click "Orders_Icon"
+
+TypeText "adt1"
+TypeText Return
+
+If ImageFound(60, (text:"Place Patient in Bed")) then
+	Click FoundImageLocation()
+	TypeText OptionKey,"a"
+	//TypeText "general medicine",Tab
+	//TypeText Tab
+	TypeText global CurrentPatient.AdmitProviderID,Tab
+	TypeText global CurrentPatient.AdmitProviderID,Tab
+	TypeText "101",Tab
+	TypeText "1",Tab
+	TypeText Tab,Tab
+	TypeText "copd",Tab,Tab
+	TypeText global CurrentPatient.ProviderCareTeamID,Tab
+	TypeText OptionKey,"a"
+End If
+
+TypeText OptionKey,"s"
+
+If ImageFound(Image:"Treatmentteam_selected", WaitFor:3) then
+	Click FoundImageLocation()
+End If
+
+If ImageFound(Image:"Nearby_selected", WaitFor:1) then
+	Click FoundImageLocation()
+End If
+
+Click (Image:"AuthorizingProviders", WaitFor:49)
+
+TypeText global CurrentPatient.AdmitProviderID,Tab
+TypeText OptionKey,"a",Return
+
+If ImageFound("AdmitOrderComplete") then
+	LogSuccess "The ADT1 order is complete"
+End If
+
+If ImageFound(10, "OrderandOrderSetSearch") then
+	Click (Text:"Cancel")
+	
+End If
+
+run CommandDepot.StopRecordingThisScript
+

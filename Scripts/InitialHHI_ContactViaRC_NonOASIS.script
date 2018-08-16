@@ -1,0 +1,79 @@
+﻿MoveTo "image0002"
+(*LoginTo_RC_FindAppt_CompleteAdmin*)
+
+//Complete Remote Client Demographics and Advanced Demographics form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"Demographics")
+set the searchRectangle to ()
+run CommandDepot.SetSearchRectangleCommand RC_DemographicsPatientTrackingSheet_A, 500, 500, 0, 0
+Click (Text:"PCP")
+Click "Startofcaredate"
+TypeText global CurrentPatientVisit.VisitDate,Tab
+TypeText OptionKey,"n"
+Click "Asian"
+Set the searchRectangle TO ()
+
+//Complete Payment Information form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"Payment Information")
+set the searchRectangle to ()
+
+//Complete Remote Client M1000 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1000")
+set the searchRectangle to ()
+Click "RC_ShortStay"
+Click "Next/Next"
+TypeText "t-3",Tab
+
+//Complete Remote Client M1030 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1030", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+set the searchRectangle to ()
+Wait 2
+//Therapies
+Click "RC_None"
+Click "Next/Next"
+//Risk for Hospitalization
+Click "RC_None"
+Click "Next/Next"
+//ED Readimission Risk
+Click "Next/Next"
+//Overall Status
+Click "RC_PatientTemporarilyAtRisk"
+Click "Next/Next"
+//Risk Factors
+Click "RC_None"
+Click "Next/Next"
+//Flu Vaccine Data Collection Period
+Click "RC_Block1"
+Click "Next/Next"
+//Flu Vaccine Received
+Click "RC_Block1"
+Click "Next/Next"
+//Pneumococcal Vaccine Received
+Click "RC_Block1"
+Click "Next/Next"
+//Height/Weight
+Click "Heightininches"
+TypeText "63",Tab,"165",Tab
+
+//Complete Remote Client M1100 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1100", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+set the searchRectangle to ()
+Click "RC_Block09"
+
+//Complete Remote Client M1400 Form
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 100
+Click (Text:"M1400", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"M0123456789")
+set the searchRectangle to ()
+Click "RC_Block0"
+Click "Next/Next"
+Click "RC_None"
+
+set global c_VisitNumber = global c_VisitNumber + 1
+
+
+
+

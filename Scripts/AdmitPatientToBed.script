@@ -1,0 +1,202 @@
+﻿GetAdHocData
+Log "Admit patient to bed"
+
+(*
+repeat 60 times
+	if ImageFound(1,"NewReservation") then exit repeat
+end repeat
+*)
+
+//Begins New Reservation process
+(*Click (Image:"NewReservation",WaitFor:30)*)
+TypeText optionKey,"i"
+//Check to determine whether patient is already admitted and discharges patient if necessary
+If ImageFound(2,"Thispatientiscurrentlyadmitted") then 
+	TypeText Return
+	LogWarning "Patient Already ROOMED"
+	Put "true" into global roomed
+	Click "Admitted"
+	Wait 1
+	Click "Discharge"
+	
+	TypeText tabKey,tabKey,tabKey
+	TypeText "t",tabKey
+	TypeText "n-1",tabKey,tabKey
+	TypeText "1"
+	KeyDown optionKey,"d"
+	KeyUp optionKey
+	Click (Image:"NewReservation",WaitFor:30)
+End if
+
+//Creates New Reservation
+TypeText "t"
+TypeText Tab
+TypeText global wing
+TypeText Tab
+TypeText "101"
+TypeText Tab
+TypeText "2636"
+TypeText Tab
+TypeText "142"
+TypeText Tab
+TypeText optionKey,"n"
+
+If ImageFound(2, "PossibleduplicateAdmission") Then
+	TypeText downArrow
+	TypeText downArrow
+	Click (Image:"CreateNewAdmissionRadioButton", WaitFor:1)
+	TypeText OptionKey,"a"
+	
+End If
+
+(*	
+	Click (Image:"ExpectedDate",WaitFor:10)
+	Click (Image:"Today",WaitFor:10)
+	
+	Click (Image:"UnitField", WaitFor:10)
+	TypeText global wing, Return
+	
+	if ImageFound(10,"Accept")
+		Click FoundImageLocation()
+
+
+end if
+Wait 1
+
+Click (Image:"PatientClass",WaitFor:10)
+Click (Image:"Inpatient",WaitFor:10)
+Click "Accept_0003"
+Click (Image:"AdmittingProvider",WaitFor:10)
+TypeText "weir, sam",Return
+Click "Service"
+TypeText "Pulmonology (MDG)"
+wait 8
+if ImageFound(10,"PulmonologyMDG_2") then
+	Click FoundImageLocation()
+	if ImageFound(10,Accept)
+		Click Accept
+	end if
+else if ImageFound(10,"PulmonologyMDG_1") then	
+	Click FoundImageLocation()
+	if ImageFound(10,Accept)
+		Click Accept
+	end if
+else	
+	Click "PulmonologyMDG"
+end if
+
+*)
+
+
+if ImageFound(10,"Createanewadmission")
+	Click FoundImageLocation()
+	TypeText optionKey,"a"
+	
+end if
+
+//Completes the Reservation Info form
+If ImageFound(Image:"Expectedtime", WaitFor:30) then
+	Click FoundImageLocation()
+	TypeText "n",tabKey,tabKey
+	TypeText "1",tabKey
+	TypeText "2",tabKey,tabKey
+	TypeText "COPD",tabKey,tabKey,tabKey,tabKey
+	TypeText "obs & treat",tabKey,tabKey,tabKey,tabKey,tabKey,tabKey,tabKey,tabKey,tabKey,tabKey,tabKey
+	TypeText "1",tabKey
+End If
+
+//Click (Image:"HomeNonHealthcareFacilityWork",WaitFor:30)
+//Click "Accept_0006"
+
+//Click (Image:"AdmissionType",WaitFor:10)
+//Click "Urgent"
+//Click "Accept_0007"
+
+//Click "FreeTextDiagnoses"
+//TypeText "COPD"
+//Click "FreeTextProcedures"
+//TypeText "obs & treat"
+//Click "TypeOfRoom"
+
+//Click (Image:"Private", WaitFor:10)
+//Click (Image:"Accept_0006", WaitFor:15)
+
+//Checks for presence of PCP on Interactive Face Sheet
+Click (Image:"OpenFolder", WaitFor:60)
+if ImageFound(5,"PCPNoGeneralPCP") then
+	//	Click (Image:"ClosedFolder", WaitFor:45)
+	Click (Image:"PCPNoGeneralPCP", WaitFor:2.7)
+	Wait 1
+	TypeText "WEIR, SAM",Return
+	Wait 1
+	Click (Image:"Start", WaitFor:57)
+	TypeText "mb",Return
+	Click (Image:"Accept_5", WaitFor:5.6)
+	Click "CloseX"
+else
+	//Click "ClosedFolder"
+end if
+
+
+//Completes Providers/Research form
+Click (Image:"ProvidersResearch",WaitFor:10)
+Click (Image:"ReferralSource",WaitFor:10)
+Wait 1
+TypeText "pcp"
+TypeText tab
+
+
+//Adds hospital account
+Click (Image:"HospitalAccounts",WaitFor:5)
+If ImageFound(8.0,"AssiqnSelectedAccount") then
+	Click FoundImageLocation()
+else 
+	TypeText optionKey,"w"
+end if
+
+//Completes New Reservation
+Click (Image:"Reserve", WaitFor:5)
+If ImageFound(5,"Continue") Then
+	Click "Continue"
+	wait 30
+else
+End If
+
+//Filters on current encounters
+If ImageFound(15, "PatientStationCurrent") then
+	Click FoundImageLocation()
+End if
+
+
+
+
+//Starts admission process
+if ImageFound(Image:"PendAdm", WaitFor:5) then
+	Click FoundImageLocation()
+else if ImageFound(Image:"PendAdm_Selected", WaitFor:6.9) then
+	Click FoundImageLocation()
+else
+	Click(Text:"Discharged")
+	TypeText  ControlKey,HomeKey
+end if
+
+TypeText optionKey,"d"
+
+Run "Complete Encounter Info Form"
+
+Complete_Accommodations_Form
+
+//Run "Complete Checklist Verification"
+Run "VerifyFromRegistrationSidebar"
+
+//Admits patient
+Click (Image:"Admit", WaitFor:10)
+Click (Image:"Continue",WaitFor:20)
+
+If ImageFound(15, "PatientStationHighlightedAdmitted") then
+	LogSuccess "Patient has been admitted"
+	
+End If
+
+//End If
+

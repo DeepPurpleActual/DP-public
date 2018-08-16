@@ -1,0 +1,27 @@
+﻿global MRN
+
+Click "ChartSearchMagnifyingGlass"
+TypeText "schedule", Return
+if ImageFound(30, "MultiProviderScheduleHeader") then
+	Click FoundImageLocation()
+end if
+
+
+if ImageFound(5.0, (text:global MRN)) then
+	DoubleClick FoundImageLocation()
+else
+	LogError "MRN could not be found"
+end if
+
+
+Click (Image:"ProblemListIcon", WaitFor:5)
+TypeText "Breast Cancer, Left"
+Click "ProblemListAdd"
+TypeText OptionKey,"a"
+TypeText OptionKey,"a"
+Click (Image:"nipple", WaitFor:14)
+Click "areola"
+Click "female"
+TypeText OptionKey,"a"
+
+

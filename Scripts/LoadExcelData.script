@@ -1,0 +1,25 @@
+﻿params theid
+
+if global ZephyrID ="" then
+	if theid = "" then	
+		set global ZephyrID to "EIT-2354"
+	else
+		set global ZephyrID to theid
+	end if
+end if
+
+put "data_" & global ZephyrID & ".xlsx" into datafilename
+
+set global myScriptData to (type:"excel", file:ResourcePath(datafilename)) -- set the specified variable, myScriptData, to store the contents of the referenced Excel file
+
+put the records of global myScriptData into global testpatients -- fetch all records from the myScriptData variable and place them into the testpatients variable
+
+put the number of records of global myScriptData into global recordcount
+
+//put global testpatient joined by return -- show the data from the states variable one record per line
+
+repeat with each item global testpatient of global testpatients
+	log global testpatient.mrn
+end repeat
+
+

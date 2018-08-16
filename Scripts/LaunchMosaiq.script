@@ -1,0 +1,14 @@
+﻿RightClick "StartIcon"
+Click "Run"
+TypeText "c:\mosaiq_app_test_rex\accwin.exe inst_ID=10"
+TypeText Return
+
+Click (Image:"MosaiqUserName", WaitFor:30)
+TypeText "epmqsched",Tab
+TypeEncodedText "u5fvpcCH<dj3+w:", "mosaiq"
+TypeText Return
+
+
+
+
+

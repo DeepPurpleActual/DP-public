@@ -1,0 +1,17 @@
+﻿//Add allergy
+Click "PatientHeaderAllergies"
+Wait until ImageFound(Image:"Addanewagent", WaitFor:5)
+Click FoundImageLocation()
+TypeText global CurrentPatient.Allergy1,Return
+TypeText OptionKey,"a"
+Click "Reactions"
+TypeText global CurrentPatient.AllergyReaction1,Tab
+Click (Image:"Noted", WaitFor:12.8)
+TypeText global CurrentPatient.AllergyDateNoted1,Tab
+TypeText OptionKey,"a"
+run CommandDepot.SetSearchRectangleCommand Allergies_1, 400, 400, -5, 0
+If ImageFound(1, (text:global CurrentPatient.Allergy1)) then
+	LogSuccess "The problem has been added"
+End If
+set the searchrectangle to ()
+

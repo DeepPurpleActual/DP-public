@@ -1,0 +1,260 @@
+﻿global CurrentContactProvider
+
+set global CurrentPatientVisit to the record of global myConnectionString where RecNumber is global RecordCountCounter
+Log global CurrentPatientVisit.ContactProvider
+
+If global CurrentContactProvider <> global CurrentPatientVisit.ContactProvider then
+	If ImageFound(5, "HomeHealthIconTST") then
+		DoubleClick "HomeHealthIconTST"
+	else
+		run RC_SyncTheSyncNeededPatients
+		Click "CMD_Close1"
+		WaitFor 90, "HomeHealthIconTST"
+		DoubleClick "HomeHealthIconTST"
+	End If
+	
+	Repeat until ImageFound(1, "RC_LogIn")
+		Wait 1
+	End repeat
+	
+	(*set global CurrentPatientVisit.ApptProvider1 to EPHHSLP*)
+	
+	TypeText global CurrentPatientVisit.ContactProvider,Tab
+	TypeText "EggplantTST!"
+	TypeText OptionKey,"l"
+	
+	Repeat until ImageFound("SyncOptions")
+		Wait 1
+	End repeat
+	
+	//Set initial screen for new RC login
+	Click "RC_Schedule"
+	
+	If ImageFound(2, "RC_UnexpectedError") then
+		TypeText Return, Return
+	End If
+	
+	Repeat until ImageFound("TBD_ColumnHeader")
+		Wait 1
+	End repeat
+	
+	If ImageFound(2, "RC_DaysToDisplay") then
+		Click FoundImageLocation()
+	End If
+	
+	//Set schedule to current date
+	Click "RC_Date"
+	TypeText global CurrentPatientVisit.VisitDate,Tab
+	
+	run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 850, 0, 0
+	Repeat until ImageFound(.5, (text:"12:00a", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"0123456789:ap"))
+		set the SearchRectangle to ()
+		Repeat 3 times
+			Click "ScrollbarUpArrow"	
+		End Repeat
+		run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 850, 0, 0
+	end repeat
+	Wait 2
+	set the searchRectangle to ()
+	
+	Click "RC_MyPatients"
+	
+	run CommandDepot.SetSearchRectangleCommand Newmessages, 300, 20, 150, -3
+	Repeat until ImageFound(text:"Connected")
+		Wait 1
+	End repeat
+	Wait 15
+	set the searchRectangle to ()
+	(*Click "SyncOptions"
+	Click "TodaysPatients"
+	TypeText OptionKey,"a"
+	Wait 30
+	run CommandDepot.SetSearchRectangleCommand Newmessages, 300, 20, 150, -3
+	Repeat until ImageFound(text:"Connected")
+		Wait 1
+	End repeat
+	set the searchRectangle to ()*)
+	
+	Log "All of My Patients are synced"
+	
+End If
+
+//Setting variable to capture current login provider
+set global CurrentContactProvider to global CurrentPatientVisit.ContactProvider
+
+//Finding Patients on schedule
+Click "RC_Schedule"
+
+Repeat until ImageFound("TBD_ColumnHeader")
+	Wait 1
+End repeat
+
+(*set global CurrentPatientVisit.ApptTime1 to "0300"*)
+set tempSearchHour to the first two characters of global CurrentPatientVisit.ApptTime1
+
+if the first character of global CurrentPatientVisit.ApptTime1 is "0"
+	set tempAMPM to "a"
+	set tempSearchHour to the second character of global CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+else if tempSearchHour < 12 then
+	set tempAMPM to "a"
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+else if tempSearchHour = 12 then
+	set tempAMPM to "p"
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+else
+	set tempAMPM to "p"
+	set tempSearchHour to tempSearchHour - 12
+	set tempSearchMinute to the last two characters of global CurrentPatientVisit.ApptTime1
+end if
+
+if tempSearchHour = 2 and tempAMPM = "p" then
+	run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 120, 0, 0
+	Repeat until ImageFound(.5, (text:"1:45p", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"0123456789:ap"))
+		set the SearchRectangle to ()
+		Repeat 7 times
+			Click "ScrollbarDownArrow/ScrollbarDownArrow3"	
+		End Repeat
+		run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 120, 0, 0
+	end repeat
+end if
+
+if tempSearchHour = 2 and tempAMPM = "a" then
+	run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 120, 0, 0
+	Repeat until ImageFound(.5, (text:"1:45a", Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"0123456789:ap"))
+		set the SearchRectangle to ()
+		Repeat 7 times
+			Click "ScrollbarDownArrow/ScrollbarDownArrow3"	
+		End Repeat
+		run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 120, 0, 0
+	end repeat
+end if
+
+set tempSearchTime to tempSearchHour & ":" & tempSearchMinute & tempAMPM
+
+log tempSearchTime
+
+set the SearchRectangle to ()
+
+run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 850, 0, 0
+
+Repeat until ImageFound(.5, (text:tempSearchTime, Contrast:"Off", DPI:"72", Language:"English", ValidCharacters:"0123456789:ap"))
+	set the SearchRectangle to ()
+	Repeat 7 times
+		Click "ScrollbarDownArrow/ScrollbarDownArrow3"	
+	End Repeat
+	run CommandDepot.SetSearchRectangleCommand TBD_ColumnHeader, 51, 850, 0, 0
+end repeat
+
+set tempAppointmentBlock to FoundImageLocation() + (30,0)
+
+Wait 2
+
+DoubleClick tempAppointmentBlock
+
+set the searchRectangle to ()
+
+if ImageFound(15, "RC_NotSelectedPatient") then
+	TypeText Return
+end if
+
+if ImageFound(15, "RC_NoVisitSet") then
+	TypeText Return
+end if
+
+If global CurrentPatientVisit.ContactID = "1100" or global CurrentPatientVisit.ContactID = "1200" then
+	Repeat until ImageFound(1, "RC_EnterCertPeriodDates")
+		Wait 1
+	End repeat
+	TypeText Tab,global CurrentPatientVisit.VisitDate,Tab
+	TypeText OptionKey, "a"
+	
+End If
+
+(*set global CurrentPatientVisit.TOS_ID to "15"
+set global CurrentPatientVisit.ApptTime1 to "0300"*)
+
+(*
+if the first character of CurrentPatientVisit.ApptTime1 is "0" then
+	set tempAMPM to "a"
+set tempSearchHour to the second character of CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of CurrentPatientVisit.ApptTime1
+else
+	set tempAMPM to "p"
+	set tempSearchHour to the first two characters of CurrentPatientVisit.ApptTime1
+	set tempSearchMinute to the last two characters of CurrentPatientVisit.ApptTime1
+end if
+*)
+
+set tempSearchTime to tempSearchHour & ":" & tempSearchMinute & tempAMPM
+set tempDrivingStart to tempSearchTime // - 12 minutes
+set tempDrivingEnd to tempSearchTime // - 2 minutes
+set tempVisitStart to tempSearchTime // - 1 minutes
+set tempVisitEnd to tempSearchTime // + 14 minutes
+
+log tempSearchTime
+log tempDrivingStart
+log tempDrivingEnd
+log tempVisitStart
+log tempVisitEnd
+
+//Check for unexpected error
+If ImageFound(2, "RC_UnexpectedError") then
+	TypeText Return, Return
+End If
+
+
+//Complete Admin form
+WaitFor 90, "AddRemoveForms"
+Wait 2
+run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 250, -5, 0
+If ImageFound(2, text:"Admin", Contrast:"Off", DPI:"72", Language:"English", ValidWords:(Admin)) then
+	Click FoundImageLocation()
+Else
+	run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 500, 250, -5, 0
+	if ImageFound(2, (text:"Type of service")) then
+		
+	else
+		LogError "Admin form could not be located."
+	End If
+End If
+
+
+set the searchRectangle to ()
+TypeText global CurrentPatientVisit.TOS_Name,Tab
+TypeText tempDrivingStart,Tab,Tab
+TypeText tempDrivingEnd,Tab,Tab
+TypeText tempVisitStart,Tab,Tab
+TypeText tempVisitEnd,Tab,Tab
+TypeText "0",Tab
+
+If global CurrentPatient.ContactID = "1100" then
+	run "InitialHHI_ContactViaRC_OASIS"
+End If
+
+If global CurrentPatient.ContactID = "1200" then
+	run "InitialHHI_ContactViaRC_NonOASIS"
+End If
+
+If global CurrentPatient.ContactID = "1130" or global CurrentPatient.ContactID = "2130" or global CurrentPatient.ContactID = "3130" or global CurrentPatient.ContactID = "4130" then
+	run "SubsequentHHI_ContactViaOASIS"
+End If
+
+If global CurrentPatient.ContactID = "1170" then
+	run "HHI_AddSupplies"
+	run "RC_DischargeOASISPatient"
+End If
+
+If global CurrentPatient.ContactID = "1270" then
+	run "HHI_AddSupplies"
+	run CommandDepot.SetSearchRectangleCommand AddRemoveForms, 200, 750, -5, 0
+	Click "RC_DischargeReasonInstructions"
+	TypeText "3",Tab
+	set the searchRectangle to ()
+End If
+
+RC_CloseEncounter
+
+
+
+

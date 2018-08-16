@@ -1,0 +1,38 @@
+﻿global CurrentPatient
+
+If ImageFound(Image:"RegistrationWizard", WaitFor:10) then
+	Run NewPatientWizard
+Else
+	If ImageFound(5, "DemographicsDialogBoxHeader") = false then
+		Set the SearchRectangle to ("PatientIFS_A","PatientIFS_B")
+		Click (700,700)
+		Click (Text:"Demographics",ValidWords:"Demographics")
+		set the searchRectangle to ()
+	End if
+	
+	//Adds patient demographics and closes Demographics Dialog Box
+	AddPatientDemographics
+	TypeText OptionKey,"a"
+	
+	//Add patient PCP
+	TypeText OptionKey,"p"
+	AddPatientPCP
+	
+	//Add Patient Contacts
+	if global CurrentPatient.PatientContact1 <> "" then
+		AddPatientContacts
+	end if
+	
+	//Add patient guarantor
+	if global CurrentPatient.GuarantorRelationship <> "" and global CurrentPatient.GuarantorRelationship <> "self" then
+		AddGuardianGuarantor
+	else
+		Click "Clickheretoaddaguarantor"
+		TypeText OptionKey,"w"
+	end if
+	
+	AddInsuranceAndCompleteWizard
+	
+	TypeText OptionKey,"f"
+	
+End If

@@ -1,0 +1,21 @@
+﻿Click (700,700)
+
+Click "PatientContacts"
+Click (Image:"CareTeam_Add", WaitFor:5)
+
+TypeText global CurrentPatient.PatientContact1
+TypeText OptionKey,"p"
+
+Click "Reltopatient"
+TypeText global CurrentPatient.PatientContactRelationship1
+
+Click "Preferredlanguage_1"
+TypeText global CurrentPatient.PatientContactPreferredLanguage1,tab
+
+TypeText OptionKey,"a"
+
+Wait 1
+
+TypeText OptionKey,"a"
+
+

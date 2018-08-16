@@ -1,0 +1,120 @@
+﻿Params LoginUserID,LoginDeptType
+
+Set global G_LoginUserID to LoginUserID
+Set global G_LoginDeptType to LoginDeptType
+
+run CommandDepot.StartRecordingThisScript "Login"&&LoginUserID
+
+//GetAdHocData
+
+set LoginDeptID to CommandDepot.DetermineLoginDeptID(LoginDeptType) 
+log LoginDeptID
+
+//Check to see whether current user is already logged in
+Run "Read Titlebar"
+
+If global TitlebarLogin contains LoginUserID then
+	LogSuccess "Login was successful for user "& LoginUserID
+Else
+	log "Login for " && LoginUserID && " has started"
+	
+	click (Image:"UserID",WaitFor:10)
+	TypeText LoginUserID, Return
+	//wait 8
+	//TypeText Tab
+	If LoginUserID begins with "ep" then
+		TypeText "EggplantTST!",Return
+	else if global TrainingEnvironment = "Yes" then
+		TypeText "train",Return
+	Else
+		TypeText "model",Return
+	End If
+	
+	
+	(*If ImageFound(2, (text:"Incorrect user")) then
+	TypeText "model",Return
+end if*)
+	
+	
+	If ImageFound("PrintProfile") then
+		Click FoundImageLocation()
+		If ImageFound(Image:"Hyperspace_FinalOK", WaitFor:10) then
+			Click FoundImageLocation()
+		End If
+		
+	else if LoginDept not equal to "" then
+		If ImageFound("EpicHyperspaceSubtitle") then
+			Click "Hyperspace2017Department"
+		else
+			Click "HyperspaceLogo"
+		end if
+		
+		TypeText LoginDeptID,Return
+		wait 2
+		TypeText Return
+		
+		If ImageFound(Image:"Hyperspace_FinalOK", WaitFor:10) then
+			Click FoundImageLocation()
+		End If
+		
+		(*	wait 10
+	TypeText Return*)
+	End If
+	
+	If ImageFound(5, "MessageoftheDay") Then
+		TypeText OptionKey,"o"
+	End If
+	
+	Repeat 3 times
+		If ImageFound(Image:"ReportSettings", WaitFor:1) Then
+			Click "PrivateReport"
+			Click "Mydefaultreport"
+			TypeText OptionKey,"r"
+			Wait 2
+		else
+			Exit repeat
+		End If	
+	End Repeat
+	
+	If ImageFound(Text:"Snapboard") Then
+		Click (Text:"Cancel")
+	End If
+	
+	If ImageFound(Image:"NowShowing") Then
+		TypeText OptionKey,"n"
+	End If
+	
+	If ImageFound(Image:"Anerrorhasoccurredinthescript") Then
+		TypeText OptionKey,"n"
+	End If
+	
+	If ImageFound(Image:"ManagerConfigurationSelect") Then
+		Click FoundImageLocation()
+		TypeText global CurrentPatient.BedDeptName,Return
+		TypeText OptionKey,"a"
+	End If
+	
+	If ImageFound(Image:"SwitchManager") Then
+		Click FoundImageLocation()
+		TypeText global CurrentPatient.BedDeptName,Return
+		TypeText OptionKey,"a"
+	End If
+	
+	If ImageFound(Image:"DashboardLauncher",WaitFor:3) then
+		TypeText OptionKey,"c"
+	End If
+	
+	Run "Set Preferences"
+	
+	Run "Read Titlebar"
+	
+	If global TitlebarLogin contains LoginUserID then
+		LogSuccess "Login was successful for user "& LoginUserID
+	Else
+		LogWarning "Login was unsuccessful for user "& LoginUserID
+	End If
+	
+End If
+
+run CommandDepot.StopRecordingThisScript
+

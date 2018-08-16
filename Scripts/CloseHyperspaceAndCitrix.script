@@ -1,0 +1,17 @@
+﻿TypeText OptionKey,"x"
+
+TypeText OptionKey,F4
+
+If ImageFound(2, "EpicButton") then
+	Click (Image:"CMD_Close1", WaitFor:3)
+End If
+
+If ImageFound(Image:"AreyousureyouwanttoexitHyperspace", WaitFor:3) then
+	Typetext Optionkey, "x"
+End If
+
+If ImageFound(Image:"WindowsClose", WaitFor:2) then
+	Click FoundImageLocation()
+End If
+
+Set global HyperspaceLaunched to "No"

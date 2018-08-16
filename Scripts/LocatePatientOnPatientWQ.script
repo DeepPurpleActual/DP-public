@@ -1,0 +1,40 @@
+﻿Params WQ_ID
+
+If WQ_ID = "" then
+	set WQ_ID = 579
+End If
+
+Run "OpenWQ_List"
+
+If ImageFound(Image:"ScheduleOrdersWQTab", WaitFor:5) then
+else
+	Click "ScheduleOrdersWQTab_unselected"
+	
+End If
+
+DoubleClick (Text:WQ_ID)
+
+If ImageFound(Image:"ListHeaderDateOrdered", WaitFor:10) then
+	Click FoundImageLocation()
+End If
+
+If ImageFound(Image:"ListHeaderDateOrdered_ascending", WaitFor:10) then
+	Click FoundImageLocation()
+End If
+
+If ImageFound(Image:"ListHeaderDateOrdered_descending", WaitFor:10) then
+	Log "List is now ordered in descending order by OrderID"
+End If
+
+TypeText ControlKey,homeKey
+
+set the searchRectangle to ("ListHeaderOrderID","WQListBottomRightCorner")
+
+Repeat until ImageFound((text:global referralOrder))
+	Click "ScrollbarDownArrow"
+End repeat
+
+Click FoundImageLocation()
+
+Click "WQScheduleButton"
+

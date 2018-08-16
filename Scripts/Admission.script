@@ -1,0 +1,102 @@
+﻿
+Run "HyperspaceStart"
+
+(*
+if ImageFound("HyperspaceTST") then
+	Click "HyperspaceTST"
+	//KeyDown OptionKey,F4
+	//KeyUp OptionKey,F4
+end if
+
+(*
+if ImageFound("HyperspaceTST") then
+	KeyDown OptionKey,F4
+	KeyUp OptionKey,F4
+end if
+
+if ImageFound("HyperspaceTST") then
+	KeyDown OptionKey,F4
+	KeyUp OptionKey,F4
+end if
+*)
+
+If imagefound(8,"ChromeDot") then
+	If not ImageFound(8,"image0075")
+		If ImageFound("EpicStartBar") then
+		else
+			Run "HyperspaceStart_2"
+		end if
+	else
+		Run "HyperspaceStart_2"
+	End If
+End If	
+*)
+
+global dept
+global mrn
+global wing
+global room
+global bed
+global abbrev
+global roomed
+global ScriptOwner
+global SuiteFolder
+
+put items 1 to -2  delimited by "/" of my folder into SuiteFolder
+
+set ScriptOwner to "david.hester@unchealth.unc.edu"
+
+//repeat with thedata = each line of file(SuiteFolder & "/data_files/AdmissionValidationPRD.txt")
+repeat with thedata = each line of file(SuiteFolder & "/data_files/AdmissionValidation.txt")
+	
+	put item 1 of thedata into dept
+	put item 2 of thedata into mrn
+	put item 3 of thedata into wing
+	put item 4 of thedata into room
+	put item 5 of thedata into bed
+	put item 6 of thedata into abbrev
+	put "false" into roomed
+	
+	log abbrev & " (" & dept & ") " & mrn
+	
+	Run Login "epipmd", dept
+	
+	Run "Patient"
+	
+	Run "ADT1_Orders_Only_Encounter"
+	
+	Logout
+	
+	Run Login "epadtcr", dept
+	
+	Run "Patient"
+	
+	Run "AdmitPatientToBed"	
+	
+	Logout
+	
+	login "epipmd", dept
+	
+	Run "InpatientModification"
+	
+	Logout
+	
+	Login "epadtcr", dept
+	
+	Run "Patient"
+	
+	Run "Discharge"
+	Log "Discharge Complete for " & abbrev & " (" & hosp & ") " & mrn	
+	
+	wait 10
+	Logout	
+	(*
+	Run "ADTBEDPL Login"	
+	Run "Clean bed"	
+	Logout
+	
+	wait 10
+	*)
+end repeat
+
+//Run "Hyperspace Close"

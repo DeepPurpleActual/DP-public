@@ -1,0 +1,50 @@
+﻿global CSN
+
+// Call for MRN here
+
+
+If global MRN = "" then
+	Set MRN to "100000367282"
+	Set VisitType to "11703763"
+End If
+
+Click ChartSearchMagnifyingGlass
+TypeText "dept appts",Return
+
+(*put ImageRectangle(Image:"DAR_CSN", WaitFor:5) into CSN_Rectangle
+set StartLeftCSN = left(CSN_Rectangle)
+set StartTopCSN = top(CSN_Rectangle) + 20
+set EndRightCSN = StartLeftCSN +85
+set EndBottomCSN = StartTopCSN + 20
+set UL_CSN=(StartLeftCSN,StartTopCSN)
+set BR_CSN=(EndRightCSN,EndBottomCSN)
+set global AppointmentCSN = ReadText(UL_CSN,BR_CSN)
+log UL_CSN
+log BR_CSN*)
+
+Click (Image:"FullAppointmentList", WaitFor:30)
+
+CommandDepot.SetSearchRectangleCommand FullAppointmentList,500,500,100,0
+
+Click (Text:global MRN, WaitFor:10, ValidCharacters: "0123456789")
+
+set the searchRectangle to ()
+
+set global CSN to CommandDepot.ReadTextOnSameLine(global MRN,DAR_CSN) 
+log global CSN
+
+TypeText OptionKey,"i"
+If ImageFound(Image:"SameDayAppointments", WaitFor:2) Then
+	Click OK_Button
+End If
+
+If ImageFound(Image:"MyChartSignup", WaitFor:2) Then
+	TypeText OptionKey,"l"
+	
+End If
+
+RegisterPatientAtCheckin
+
+VerifyFromRegistrationSidebar
+
+Click (Image:"ActionLightningBolt", WaitFor:5)

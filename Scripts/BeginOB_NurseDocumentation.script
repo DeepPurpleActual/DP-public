@@ -1,0 +1,28 @@
+﻿If ImageFound(5, "GreaseboardExpandDownArrow") then
+	Click FoundImageLocation()
+End If
+
+run CommandDepot.SetSearchRectangleCommand ColumnHeaderName, 350, 600, 0, 0
+
+(*set global CurrentPatient.PatientName to "Eggplanttest,Twothreefivefour Foxtrot"*)
+DoubleClick (Text:global CurrentPatient.PatientName, ignoreSpaces: On)
+
+set the searchRectangle to ()
+
+If ImageFound(.5, "CarePlanAdded") then
+	TypeText optionKey, "o"
+	
+End If
+
+Click "Dating"
+TypeText "t-280",Tab
+Click "SelectEDD"
+TypeText F9
+
+set tempGA to CommandDepot.ReadTextOnSameLineAsImageForGivenDistance(PatientHeaderGA,100,yes,100,"1234567890wd")
+log tempGA
+
+if tempGA <> "40w0d" then
+	LogError "The Gestational Age was not captured in the Patient Header"
+end if
+

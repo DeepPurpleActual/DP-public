@@ -1,0 +1,9 @@
+﻿Click "ED_Arrival"
+TypeText "100000376291"
+TypeText OptionKey,"f"
+TypeText OptionKey,"s"
+Click (Image:"ED_ArrivalInformation", WaitFor:3)
+TypeText OptionKey,"r"
+TypeText "fam",Tab
+TypeText "car",Tab
+Click "GreenCheck"

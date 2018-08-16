@@ -1,0 +1,24 @@
+﻿params paramName1,paramName2
+
+log paramName1
+log paramName2
+
+log "GetEnvironment script begins"
+global RootFolder
+global EnvironmentName
+
+Set RootFolder to paramName1
+Set EnvironmentName to paramName2
+
+log global RootFolder
+log global EnvironmentName
+
+If RootFolder ="" Then
+	Set global RootFolder = "Hyperspace"
+	Set global EnvironmentName = "Hyperspace - TST"
+End If
+
+log global RootFolder
+log global EnvironmentName
+
+log "GetEnvironment script ends"

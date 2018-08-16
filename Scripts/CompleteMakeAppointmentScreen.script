@@ -1,0 +1,106 @@
+﻿params testpatient, visittype, apptprovider, apptreason, apptdate
+
+If ImageFound(5, "MakeAppointmentDeleteAndSelectCorrectVT") then
+	click FoundImageLocation()
+	TypeText DeleteKey
+End If
+
+Click (Image:"Make AppointmentDepartment", WaitFor:32)
+TypeText global testpatient.ApptDeptID1, Tab, Tab
+TypeText global testpatient.ApptReason1,Tab
+TypeText global testpatient.VisitType1,Tab
+TypeText global testpatient.ApptProvider1, Tab
+
+If ImageFound(1, "ProviderResourceSelection") Then
+	Run CommandDepot.FindAndClickImage SelectedCheckbox,1,none,("ProviderResourceSelection","Cancel")
+	Run CommandDepot.FindAndClickText ApptProvider,1,error
+	TypeText OptionKey,"a"
+End If
+
+TypeText formattedTime("%1m/%1d/%Y",global testpatient.ApptDate1),Tab
+
+TypeText OptionKey,"s"
+If ImageFound("ExistingAppointments") then
+	Click "OK_Button"
+	
+End If
+
+If ImageFound(3, "ScheduleDateError") then
+	LogError "This provider does not have any schedulable appointments left on the date selected."
+	
+End If
+
+If ImageFound(Image:"MakeAppointmentRecommendedSolution", WaitFor:10) then //Accounts for panel scheduling
+	TypeText OptionKey,"s"
+	
+else
+	run CommandDepot.SetSearchRectangleCommand DateColumnHeaderProviderSchedule, 685, 300, -20, 1
+	log "Found it"
+	//set apptdate to "2/12/2018"
+	set availableapptlocation to CommandDepot.FindImageOnSameLineAsText(apptdate,700,"AvailableApptGreen")
+	
+	DoubleClick (availableapptlocation)
+	Log FoundImageInfo()
+	
+	if ImageFound(5, "ApptLengthDifferentFromSlot") then
+		typetext OptionKey, "n"
+	end if
+	
+	TypeText global apptreason,OptionKey,"s"
+	
+End If	
+
+Set the searchRectangle to ()
+
+If ImageFound(2, "BlockChoice") then
+	TypeText OptionKey,"o"
+End If
+
+TypeText OptionKey,"a"
+Click (Image:"HospitalAccounts", WaitFor:3.3)
+TypeText "outpatient",Tab
+If ImageFound("AssiqnSelectedAccount") then
+	Click FoundImageLocation()
+Else
+	TypeText OptionKey,"u",OptionKey,"w"
+End If
+
+//Add Research Association
+If global TestPatient.ResearchStudyID <> "" then
+	Click "ProvidersResearch"
+	run CommandDepot.SetSearchRectangleCommand ResearchStudy, 200, 100, 0, 0
+	run CommandDepot.SetSearchRectangleCommandBasedOnText "14-0236", 75, 35, -70, -5
+	Click "CheckBoxFlatUnselected"
+	TypeText "1134",Tab
+	TypeText OptionKey,"a"
+	set the searchRectangle to ()
+End If
+
+If ImageFound(5, "RegistrationFinish") Then //Allows for finishing registration for minimum reg workflows
+	Click FoundImageLocation()
+Else
+	
+	Click (Image:"Accept_w_underscore", WaitFor:8.5)
+	If ImageFound(2, "RegSidebarFlyin") then
+		Click FoundImageLocation()
+		Click "RegSidebarFlyout"
+	End If
+	
+	If ImageFound(2, "RegSidebarFlyout") then
+		Click FoundImageLocation()
+		Click "RegSidebarFlyin"
+		Click "RegSidebarFlyout"
+	End If
+	
+	
+	Wait 2
+	If ImageFound(5, "Registration_Warnings") then
+		Click FoundImageLocation()
+		TypeText OptionKey,"i"
+		
+	End If
+	
+End If
+
+TypeText ControlKey,"w"	
+

@@ -1,0 +1,20 @@
+﻿Click (Image:"NewEncounter", WaitFor:15)
+TypeText "orders only",Tab
+TypeText OptionKey,"a"
+Click (Image:"MedsOrders", WaitFor:15)
+TypeText "adt1",Return
+TypeText OptionKey,"d"
+Click (Image:"ADT1Px", WaitFor:10)
+
+TypeText OptionKey,"a"
+TypeText OptionKey,"g"
+TypeText "copd"
+TypeText Return
+TypeText OptionKey,"a"
+Click (Image:"AssociateAll", WaitFor:43)
+Click (Image:"DiagnosisCheckbox", WaitFor:15)
+TypeText OptionKey,"a"
+Wait 3
+Click "CloseX"
+
+

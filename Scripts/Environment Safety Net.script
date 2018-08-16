@@ -1,0 +1,14 @@
+﻿global RootFolder
+global EnvironmentName
+
+If global RootFolder ="" Then
+	Set global RootFolder = "Hyperspace"
+	Set global EnvironmentName = "Hyperspace - TST"
+End If
+
+If global ZephyrID = "" Then
+	Set global ZephyrID = "EIT-0"
+End If
+
+log global RootFolder
+log global EnvironmentName

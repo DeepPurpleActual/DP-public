@@ -1,0 +1,12 @@
+﻿TypeText F2
+TypeText OptionKey,"d"
+TypeText "100000484376"
+TypeText Tab
+TypeText OptionKey,"y"
+TypeText OptionKey,"s"
+If ImageFound(5, (text:"100000484376")) then
+	LogSuccess "Patient was found"
+Else
+	LogError "The patient could not be located."
+End If
+

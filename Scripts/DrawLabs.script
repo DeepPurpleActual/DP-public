@@ -1,0 +1,38 @@
+﻿set LabFileLocation to global SuiteFolder & "/data_files/lab_" & global ZephyrID & ".txt"
+log LabFileLocation
+
+DoubleClick (Text:global MRN)
+Click "ReleaseCollectSpecimens"
+
+Click (Image:"OrderInquiry", WaitFor:62)
+
+TypeText shiftKey, DownArrow
+Click (Image:"Release", WaitFor:2)
+TypeText shiftKey, UpArrow
+TypeText OptionKey,"l"
+TypeText OptionKey,"p"
+TypeText OptionKey,"l"
+TypeText OptionKey,"f"
+
+
+(*repeat with LabData = each line of file(LabFileLocation)
+	put item 1 of LabData into LabPxID
+	put item 2 of LabData into LabDesc
+	
+	log LabPxID
+	log LabDesc
+	
+	CommandDepot.SetSearchRectangleCommand "Order",200,300,-5,0
+	Click (Text:LabDesc, WaitFor:5)
+	TypeText OptionKey,"l"
+	TypeText OptionKey,"p"
+	set the searchRectangle to ()
+	Click "LabScanIcon"
+	TypeText OptionKey,"f"
+	TypeText OptionKey,"a"
+	TypeText OptionKey,"f"
+end repeat*)
+
+set the searchRectangle to ()
+
+

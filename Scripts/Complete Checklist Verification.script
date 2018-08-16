@@ -1,0 +1,62 @@
+﻿//Begins verification from the Checklist
+
+
+Click (Text:"Checklist")
+
+//Verifies insurance
+If ImageFound(5, "ContentError") then
+	Click FoundImageLocation()
+	Wait 2
+	TypeText "Verified By Website"
+	Click "Accept_1"
+	
+End if
+
+
+
+
+If ImageFound(5,"E3SVerifyHospAcct") then	
+	Click (Text:"Coverage Info", WaitFor:9.4)
+	if ImageFound(10,"rDonotbillinsurance")
+		Click "OpenFolder"
+		Wait 1
+		TypeText PageDown
+		if ImageFound(Image:"VerifiedbvWebsite", WaitFor:10) = false then
+			
+			If ImageFound(5, "Verifycoveragemember")
+				Click (Image:"Verifycoveragemember", WaitFor:10)
+			end if
+			If ImageFound(25, "VerificationChanqeStatus") or ImageFound("CouldnotfixSetstatus") then
+				Click FoundImageLocation()
+				If ImageFound(15, "ChangeStatusHyperlink") then
+					Click "ChangeStatusHyperlink"			
+				End If
+				Wait 2
+				Click (Image:"image0096", WaitFor:5)
+				
+				Click (Image:"VerifiedbyPhone", WaitFor:2.7)
+				Click "Accept"
+				Wait 1
+				TypeText ReturnKey
+			end if
+			
+		end if
+		
+		Click text:"Checklist"
+		Wait 2
+	else			
+		Click "rSelfpay"
+		Click (Text:"Checklist")
+	end if
+	
+End If
+Wait 2
+
+
+
+//Moves to bottom of checklist and accesses verification hyperlink
+Repeat until ImageFound(1, "Runallchecksandcompleteregistration")
+	TypeText PageDown
+End repeat
+Click "Runallchecksandcompleteregistration"
+

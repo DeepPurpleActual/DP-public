@@ -1,0 +1,11 @@
+﻿Params LoginUserID,LoginDeptType
+
+//GetAdHocData
+
+set LoginDeptID to CommandDepot.DetermineLoginDeptID(LoginDeptType) 
+log LoginDeptID
+
+
+
+
+

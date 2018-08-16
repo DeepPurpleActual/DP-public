@@ -1,0 +1,22 @@
+﻿GetAdHocData
+(* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+  Script generated:  2016-05-13 08:14:09
+  From session:  Change Context
+  Captured on:  2016-05-13 08:08:33
+  From server:  SUT - Oswald Testing
+* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *)
+Wait 5
+Click "ChartSearchMagnifyingGlass"
+TypeText "Change Context"
+if ImageFound(2, "ChangeContextJump") then
+	Click "ChangeContextJump"
+else
+	Click "ChangeContext_new"
+end if
+
+Click (Image:"ChangeContextDepartment",WaitFor:5)
+
+TypeText global dept
+TypeText OptionKey,"o"
+
+Wait 3

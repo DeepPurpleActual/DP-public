@@ -1,0 +1,9 @@
+﻿run "Read Titlebar"
+
+if global CurrentPatient.IntakeDeptName <> global TitlebarDepartment then
+	TypeText OptionKey
+	Click "ChangeContextButton"
+	Click "ChangeContextDepartment"
+	TypeText global CurrentPatient.IntakeDeptID,Tab
+	TypeText OptionKey,"o"
+end if

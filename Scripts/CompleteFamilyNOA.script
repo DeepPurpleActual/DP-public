@@ -1,0 +1,11 @@
+﻿If ImageFound(2, "FamilyNOA") then
+	Click (Image:"FamilyNOA", WaitFor:3)
+	Click "NoButton"
+	Click (Image:"NoButton", Waitfor:5)
+	Click (Image:"NoButton", Waitfor:5)
+	Click "CloseCheck"
+	Click "CloseX/CloseXFlowsheet"
+End If
+
+
+

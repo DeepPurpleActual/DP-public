@@ -1,0 +1,37 @@
+﻿//login as pbbillmgr
+
+TypeText ControlKey,"1"
+TypeText OptionKey,"p"
+TypeText "100000416790"
+TypeText OptionKey,"d"
+TypeText OptionKey,"a"
+Wait 1
+
+run CommandDepot.SetSearchRectangleCommand PBGuarantorSnapshotWorkqueues, 150, 150, 0, 0
+
+If ImageFound(5, (text:"804")) then
+	Click FoundImageLocation()
+End If
+
+set the searchRectangle to ()
+
+If ImageFound(5, (text:"100000416790")) then
+	Click FoundImageLocation()
+	TypeText OptionKey,"c"
+	TypeText OptionKey,"y"
+End If
+
+TypeText ControlKey,"w"
+TypeText OptionKey,"r"
+
+Click "TxInquiry"
+TypeText OptionKey,"f"
+
+run CommandDepot.SetSearchRectangleCommand SvcDepDt, 500, 200, 0, -5
+
+set tempCharge to CommandDepot.ReadTextOnSameLine("01/31/18",ProcedureColumnHeader,10) 
+log tempCharge
+
+If tempCharge = "A6448" then
+	Log "I found the right charge"
+End If

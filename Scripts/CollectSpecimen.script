@@ -1,0 +1,13 @@
+﻿Click "ScheduleTab"
+Set the SearchRectangle to ("ScheduleTree2_A","ScheduleTree2_B")
+Click (Text:"Lab Phleb 1st FL")
+Set the searchRectangle to ()
+Click (Image:"InttestNinesixA_1", WaitFor:4.1)
+Click (Image:"ReleaseCollectSpecimens_1", WaitFor:14.3)
+
+TypeText shiftKey, downArrow
+TypeText OptionKey,"l"
+TypeText OptionKey,"p"
+Click "Scanthelabelorclicktodocument"
+TypeText OptionKey,"f"
+

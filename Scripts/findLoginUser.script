@@ -1,0 +1,37 @@
+﻿(*
+put ConnectionInfo().serverID into machineName
+
+put ResourcePath("\\testing-oswald.unch.unc.edu\c$\temp\output.txt") into UserNameFile
+
+log UserNameFile
+*)
+
+TypeText windowsKey & "r"
+
+TypeText "c:\temp\output.txt", return
+
+TypeText controlKey & "a"
+
+TypeText controlKey & "c"
+
+TypeText altKey & F4
+
+
+put RemoteClipboard() into UserNameFile
+
+
+
+split UserNameFile by "\"
+
+put item 2 of UserNameFile into UserName
+
+// delete "\n" from Username
+
+
+
+log line 1 of UserName
+
+
+// bug number 9957
+
+// log RemoteClipboard()

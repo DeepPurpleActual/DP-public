@@ -1,0 +1,10 @@
+﻿Click "PatientOptions"
+Click "PatientFlags"
+TypeText "ali",Tab
+TypeText OptionKey,"a"
+
+If ImageFound(1, "Areyousurethatyouwanttomarkthepatientasalive") then
+	LogSuccess "The patient has been marked as alive"
+	Click (Image:"YES", WaitFor:1)
+	set global DeadOrAlive to "alive" 
+End If

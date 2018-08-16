@@ -1,0 +1,58 @@
+﻿global CurrentPatient
+
+TypeText OptionKey,"s"
+
+WaitFor 10, "NewAdmissionQuestionnaire"
+
+TypeText "t",Tab
+
+TypeText global CurrentPatient.BedDeptID,Tab
+
+TypeText global CurrentPatient.PatientClassID,Tab
+
+TypeText global CurrentPatient.AdmitProviderID,Tab
+
+TypeText global CurrentPatient.ServiceID,Tab,Return
+
+run "Complete Encounter Info Form"
+
+Click (Text:"Accommodations",WaitFor:15)
+TypeText "t",Tab,"n-1",Tab
+
+Click "Room"
+TypeText global CurrentPatient.Room,Tab
+TypeText ControlKey,"a"
+TypeText global CurrentPatient.Bed,Tab,Tab
+TypeText global CurrentPatient.AccommodationCodeID,Tab
+TypeText global CurrentPatient.AccommodationCodeReasonID,Tab
+
+//Completes Providers/Research form
+Click (Image:"ProvidersResearch",WaitFor:10)
+Click (Image:"ReferralSource",WaitFor:10)
+Wait 1
+TypeText "pcp"
+TypeText tab
+
+
+//Adds hospital account
+Click (Image:"HospitalAccounts",WaitFor:5)
+If ImageFound(8.0,"AssiqnSelectedAccount") then
+	Click FoundImageLocation()
+else 
+TypeText optionKey,"w"
+end if
+
+Run "VerifyFromRegistrationSidebar"
+
+Click "Admit"
+
+If ImageFound(5, "Registration_Warnings") then
+	Click FoundImageLocation()
+	TypeText OptionKey,"i"
+End If
+
+TypeText ControlKey,"w"
+
+
+
+

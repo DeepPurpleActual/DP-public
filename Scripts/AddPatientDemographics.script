@@ -1,0 +1,21 @@
+﻿global CurrentPatient
+
+//Add patient demographics
+Click (Image:"DemographicsAddress", WaitFor:10)
+
+TypeText global CurrentPatient.Address,Tab
+TypeText global CurrentPatient.ZipCode,Tab
+if ImageFound(1, "Multiplematchesfound") Then
+	TypeText OptionKey,"a"
+end if
+TypeText global CurrentPatient.HomePhone,Tab
+TypeText Tab,Tab
+TypeText Tab,Tab
+TypeText Tab
+TypeText global CurrentPatient.email,Tab
+Click "Preferredlanguage"
+TypeText global CurrentPatient.language,Tab
+TypeText Tab
+TypeText global CurrentPatient.ethnicity,Tab
+TypeText Tab
+TypeText global CurrentPatient.race,Tab

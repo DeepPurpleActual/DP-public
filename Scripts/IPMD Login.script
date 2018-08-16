@@ -1,0 +1,33 @@
+﻿GetAdHocData
+
+log "Start IPMD Login"
+
+click (Image:"UserID",WaitFor:10)
+TypeText "epipmd",Return
+//wait 8
+//TypeText Tab
+TypeText "EggplantTST!",Return
+//wait 8
+
+If global dept not equal to "" then
+	(*Click (Image:"image0017",WaitFor:30)
+	Click (Image:"Search",WaitFor:60)
+	Click (Image:"Search_1",WaitFor:60)*)
+	
+	click (Image:"HyperspaceLogo",WaitFor:10)
+	TypeText global dept,Return
+	//WaitFor 30,"Accept"
+	
+End If
+
+
+//wait 8
+TypeText Return
+wait 1
+TypeText Return
+
+Run "Set Preferences"
+
+if ImageFound("Eggplant IPMD TitleBar") then
+	LogSuccess "IPMD login was successful"
+end if

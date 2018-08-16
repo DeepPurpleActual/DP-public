@@ -1,0 +1,7 @@
+﻿wait 1
+
+set global Environment to "POC"
+
+Run "HyperspaceStart"
+
+//Run "Hyperspace Close"

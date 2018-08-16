@@ -1,0 +1,76 @@
+﻿global CurrentPatient
+
+run CommandDepot.StartRecordingThisScript CreateNewPatient
+
+(*If ImageFound(5,"PatientStation") then
+	click FoundImageLocation()
+End If*)
+
+(*If ImageFound(5, (text:"Patient Station")) then
+	click FoundImageLocation()
+Else If ImageFound(5, (text:"Home Health Intake")) then
+	click FoundImageLocation()
+Else
+	LogError "Access to Patient Lookup for Registration could not be located"
+End If*)
+Wait 3
+
+If global G_LoginDeptType = "ob" then
+	Click (Image:"OB_Arrival", WaitFor:5)
+else if global G_LoginDeptType = "hhi" then
+	Click (Text:"Home Health Intake")
+else if global G_LoginDeptType = "hspci" then
+	Click (Text:"Hospice Intake")
+else if global G_LoginDeptType = "regreg" then
+	Click "ChartSearchMagnifyingGlass"
+	TypeText "Registration",Return
+else
+	Click (Text:"Patient Station")
+End If
+
+log global CurrentPatient.PatientName
+TypeText global CurrentPatient.PatientName
+TypeText OptionKey,"f"
+TypeText OptionKey,"o"
+Click "SSN"
+TypeText "000000000",Tab
+TypeText global CurrentPatient.Gender,Tab
+TypeText global CurrentPatient.DOB,Tab
+TypeText OptionKey,"n"
+
+If ImageFound(2, "PotentialDuplicateRecords") then
+	TypeText OptionKey,"n"
+End If
+
+If ImageFound(2, "ReasonforDuplicateCreation") then
+	TypeText "1",tab,Return
+End If
+
+If ImageFound(2, "EncounterSelection") then
+	TypeText OptionKey,"a"
+End if
+
+If ImageFound(5, (text:"Home Health Intake")) then
+	TypeText OptionKey,"c"
+	Click "ChartSearchMagnifyingGlass"
+	TypeText "Patient Station",Return
+	TypeText "=",Return,Return
+End If
+
+If global G_LoginDeptType = "ob" then
+	TypeText OptionKey,"e"
+End If
+
+set global CurrentPatient.mrn to CommandDepot.ReadTextOnSameLineAsImageForGivenDistance(PatientHeaderMRN,100,yes,100,"1234567890","1...........") 
+log global CurrentPatient.mrn
+
+
+put global CurrentPatient.mrn into "mrn" of the record of global myTestPatients where "RecNumber" = global RecordCountCounter
+
+log global myTestPatients.mrn
+
+If ImageFound(5, (text:"Home Health Intake")) then
+	Click "CloseX"
+End If
+
+run CommandDepot.StopRecordingThisScript
